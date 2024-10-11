@@ -1,0 +1,27 @@
+# Logs
+logs
+*.log
+
+# Node modules
+pawalert/node_modules/
+
+# Build output
+dist/
+build/
+
+# IDE/Editor directories and files
+.idea/
+.vscode/
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other files
+*.iml
