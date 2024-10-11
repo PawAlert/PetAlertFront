@@ -18,6 +18,11 @@ const Header = () => {
                 </Link>
 
                 <div className="flex items-center space-x-6">
+                    <Link to="/mypage/profile">
+                        <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
+                            MyPage
+                        </h2>
+                    </Link>
                     {isLoggedIn ? (
                         <>
                             <Link to="/mypage/profile">
