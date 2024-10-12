@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useMutation} from '@tanstack/react-query';
-import {useAuthStore} from '../model/store';
+import {useAuthStore} from '../model/store.ts';
 import {LoginUserModel, SuccessLogin} from "../model/LoginUserModel.ts";
 
 const loginUserFn = async (credentials: LoginUserModel): Promise<SuccessLogin> => {

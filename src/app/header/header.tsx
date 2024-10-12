@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAuthStore } from "../../features/auth/model/store";
+import { useAuthStore } from "../../features/auth/Login/model/store";
 
 const Header = () => {
     const isLoggedIn = useAuthStore(state => state.isLoggedIn());

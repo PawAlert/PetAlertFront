@@ -1,6 +1,6 @@
 // src/pages/Home.tsx
 import React from 'react';
-import {useAuthStore} from "../../auth/model/store.ts";
+import {useAuthStore} from "../../auth/Login/model/store.ts";
 
 const Profile: React.FC = () => {
     const token = useAuthStore(state => state.token);

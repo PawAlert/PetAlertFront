@@ -7,7 +7,8 @@ import Post from "../../features/myPage/ui/post.tsx";
 import Favorites from "../../features/myPage/ui/favorites.tsx";
 import Contact from "../../features/myPage/ui/contact.tsx";
 import ChatList from "../../features/myPage/ui/chatList.tsx";
-import {LoginForm} from "../../features/auth/ui/LoginForm.tsx";
+import {LoginForm} from "../../features/auth/Login/ui/LoginForm.tsx";
+import {SignupForm} from "../../features/auth/signup/ui/SignupForm.tsx";
 
 
 const withRouter = createBrowserRouter([
@@ -24,6 +25,11 @@ const withRouter = createBrowserRouter([
                 path: "login",
                 element: <LoginForm/>
             },
+            {
+                path: "signup",
+                element: <SignupForm/>
+            },
+
             // 마이페이지의 사이드바 라우터
             {
                 path: "myPage",
