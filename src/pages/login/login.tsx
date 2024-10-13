@@ -1,7 +1,9 @@
+import LoginForm from "../../features/auth/Login/ui/LoginForm.tsx";
+
 const LoginPage = () => {
     return (
         <>
-            <div>로그인페이지</div>
+            <LoginForm />
         </>
     )
 }

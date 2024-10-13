@@ -7,8 +7,12 @@ import Post from "../../features/myPage/ui/post.tsx";
 import Favorites from "../../features/myPage/ui/favorites.tsx";
 import Contact from "../../features/myPage/ui/contact.tsx";
 import ChatList from "../../features/myPage/ui/chatList.tsx";
-import {LoginForm} from "../../features/auth/Login/ui/LoginForm.tsx";
 import {SignupForm} from "../../features/auth/signup/ui/SignupForm.tsx";
+import LoginPage from "../../pages/login/login.tsx";
+import MissingReportPage from "../../pages/missingPost/MissingReportPage.tsx";
+import ExamplePage from "../../shared/components/example/ExamplePage.tsx";
+import ExampleImageUpload from "../../shared/components/example/exampleImageUploader.tsx";
+import AddressSearchExample from "../../shared/components/example/examplePostCodeSearch.tsx";
 
 
 const withRouter = createBrowserRouter([
@@ -23,11 +27,15 @@ const withRouter = createBrowserRouter([
             },
             {
                 path: "login",
-                element: <LoginForm/>
+                element: <LoginPage/>
             },
             {
                 path: "signup",
                 element: <SignupForm/>
+            },
+            {
+                path: "missingPost",
+                element: <MissingReportPage/>
             },
 
             // 마이페이지의 사이드바 라우터
@@ -42,6 +50,14 @@ const withRouter = createBrowserRouter([
                     {path: "chatList", element: <ChatList/>},
                 ]
             },
+            {
+                path: "example",
+                element: <ExamplePage/>,
+                children: [
+                    {path: "imageUploader", element: <ExampleImageUpload />},
+                    {path: "postCodeSearch", element: <AddressSearchExample />},
+                ]
+            }
         ]
     }
 ]);

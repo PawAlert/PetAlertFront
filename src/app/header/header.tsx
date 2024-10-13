@@ -41,6 +41,11 @@ const Header = () => {
                             </h2>
                         </Link>
                     )}
+                    <Link to="/example">
+                        <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
+                            shared 사용예제
+                        </h2>
+                    </Link>
                 </div>
             </div>
         </header>
