@@ -2,7 +2,7 @@ import axios from "axios";
 
 // todo : 실제 배포주소로 변경하기
 const api = axios.create({
-    baseURL: "http://localhost:8080/api"
+    baseURL: `${import.meta.env.VITE_APP_API_URL}/api`
 });
 
 

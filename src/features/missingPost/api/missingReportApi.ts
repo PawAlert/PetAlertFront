@@ -2,7 +2,9 @@ import axios from 'axios';
 import {MissingReportData} from '../model/types';
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api"
+    baseURL: `${import.meta.env.VITE_APP_API_URL}/api`
+
+
 });
 
 api.interceptors.request.use((config) => {
