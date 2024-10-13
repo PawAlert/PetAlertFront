@@ -1,7 +1,7 @@
 import React from 'react';
-import {MissingReportForm} from "../../features/missingPost/ui/MissingReportForm.tsx";
+import {MissingReportForm} from "../../features/missingPost/ui/missingReportForm.tsx";
 
-const MissingReportPage: React.FC = () => {
+const MissingReportFormPage: React.FC = () => {
     return (
         <>
             <h1>실종 신고 작성</h1>
@@ -12,4 +12,4 @@ const MissingReportPage: React.FC = () => {
     )
 };
 
-export default MissingReportPage;
+export default MissingReportFormPage;
