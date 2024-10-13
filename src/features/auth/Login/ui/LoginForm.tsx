@@ -3,6 +3,7 @@ import { useLoginMutation } from "../api/LoginUser.ts";
 import { LoginUserModel } from "../model/LoginUserModel.ts";
 import { SOCIAL_LOGIN_URLS } from '../../../../app/auth.ts';
 import { useAuth } from '../customHook/useAuth.ts';
+import {fetchUserProfile} from "../../../chat/api/useApi.ts";
 
 export const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -14,11 +15,20 @@ export const LoginForm: React.FC = () => {
         e.preventDefault();
         const credentials: LoginUserModel = { email, password };
         loginMutation.mutate(credentials, {
-            onSuccess: (data) => {
-                login(data.data.token);
+            onSuccess: async (data) => {
+                const token = data.data.token;
+                login(token);
+                localStorage.setItem('token', token);
+                try {
+                    const userProfile = await fetchUserProfile();
+                    localStorage.setItem('uid', userProfile.uid);
+                } catch (error) {
+                    console.error('Failed to fetch user profile:', error);
+                }
             }
         });
     };
+
 
     const handleSocialLogin = (provider: 'GOOGLE' | 'NAVER' | 'KAKAO') => {
         window.location.href = SOCIAL_LOGIN_URLS[provider];

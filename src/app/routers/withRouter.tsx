@@ -14,6 +14,8 @@ import ExampleImageUpload from "../../shared/components/example/exampleImageUplo
 import AddressSearchExample from "../../shared/components/example/examplePostCodeSearch.tsx";
 import MissingReportFormPage from "../../pages/missingPost/MissingReportPage.tsx";
 import MissingPostListPage from "../../pages/missingPost/missingPostPage.tsx";
+import MissingPostDetail from "../../features/missingPost/ui/MissingPostDetail.tsx";
+import {ChatRoom} from "../../features/chat/ui/chatRoom.tsx";
 
 
 const withRouter = createBrowserRouter([
@@ -39,6 +41,10 @@ const withRouter = createBrowserRouter([
                 element: <MissingPostListPage/>
             },
             {
+                path: "missing-post/:id",
+                element: <MissingPostDetail/>
+            },
+            {
                 path: "missingForm",
                 element: <MissingReportFormPage/>
             },
@@ -62,7 +68,15 @@ const withRouter = createBrowserRouter([
                     {path: "imageUploader", element: <ExampleImageUpload/>},
                     {path: "postCodeSearch", element: <AddressSearchExample/>},
                 ]
-            }
+            },
+            //채팅 라우터
+            {
+                path: "chat",
+                children: [
+                    { path: "", element: <ChatList /> },
+                    { path: ":chatRoomId", element: <ChatRoom /> }
+                ]
+            },
         ]
     }
 ]);

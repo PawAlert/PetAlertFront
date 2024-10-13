@@ -3,10 +3,10 @@ import { useAuthStore } from "../../features/auth/Login/model/store";
 
 const Header = () => {
     const isLoggedIn = useAuthStore(state => state.isLoggedIn());
-    const clearToken = useAuthStore(state => state.clearToken);
+    const clearAuth = useAuthStore(state => state.clearAuth);
 
     const handleLogout = () => {
-        clearToken();
+        clearAuth();
         // todo : 로그아웃 이후 동작 추가해주기
     };
 
