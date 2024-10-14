@@ -1,12 +1,13 @@
 // src/pages/Home.tsx
-import React from 'react';
+import React from "react";
+import PostList from "../../../components/PostList";
 
 const Post: React.FC = () => {
-    return (
-        <div>
-            <h1>내가 작성한 글</h1>
-        </div>
-    );
+  return (
+    <div>
+      <PostList />
+    </div>
+  );
 };
 
 export default Post;
