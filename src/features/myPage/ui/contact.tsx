@@ -1,12 +1,12 @@
 // src/pages/Home.tsx
-import React from 'react';
-
+import React from "react";
+import ContactForm from "../../../components/ContactForm";
 const Contact: React.FC = () => {
-    return (
-        <div>
-            <h1>연락</h1>
-        </div>
-    );
+  return (
+    <div>
+      <ContactForm />
+    </div>
+  );
 };
 
 export default Contact;

@@ -8,6 +8,7 @@ const Profile3 = () => {
     email: "", // 이메일
     role: "", // 사용자 역할
     profileImageUrl: "", // 프로필 이미지 URL
+    userImage: null, // 업로드된 이미지 파일
   });
 
   const [loading, setLoading] = useState(true); // 데이터를 불러오는 중 상태 관리
@@ -37,9 +38,9 @@ const Profile3 = () => {
           username: profileData.userName,
           phoneNumber: profileData.phoneNumber,
           email: profileData.email,
-          gender: "Male", // 성별은 API에 없으므로 임시 고정값
           role: profileData.UserRoles,
           profileImageUrl: profileData.profileImageUrl,
+          userImage: null, // 초기 값은 null
         });
         setLoading(false);
       } catch (err) {
@@ -60,6 +61,14 @@ const Profile3 = () => {
     });
   };
 
+  // 이미지 선택 시 처리하는 함수
+  const handleImageChange = (e) => {
+    setFormData({
+      ...formData,
+      userImage: e.target.files[0], // 선택된 파일을 저장
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -70,13 +79,24 @@ const Profile3 = () => {
         return;
       }
 
+      // FormData 생성 및 이미지 파일 추가
+      const updatedFormData = new FormData();
+      updatedFormData.append("username", formData.username);
+      updatedFormData.append("phoneNumber", formData.phoneNumber);
+      updatedFormData.append("email", formData.email);
+      updatedFormData.append("role", formData.role);
+      if (formData.userImage) {
+        updatedFormData.append("userImage", formData.userImage); // 이미지 파일 추가
+      }
+
       // 프로필 업데이트 API 호출
       const response = await axios.put(
         "https://api.example.com/api/user/profile", // 실제 API URL로 변경
-        formData,
+        updatedFormData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // 헤더 설정
           },
         }
       );
@@ -114,10 +134,7 @@ const Profile3 = () => {
             alt="Profile"
             className="w-20 h-20 rounded-full object-cover"
           />
-          <button
-            onClick={handleImageUpdate}
-            className="absolute bottom-0 right-0 bg-gray-200 p-1 rounded-full"
-          >
+          <label className="absolute bottom-0 right-0 bg-gray-200 p-1 rounded-full cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 text-gray-500"
@@ -130,7 +147,13 @@ const Profile3 = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange} // 이미지 변경 핸들러 추가
+            />
+          </label>
         </div>
 
         <div className="ml-6 space-x-4">
@@ -206,4 +229,4 @@ const Profile3 = () => {
   );
 };
 
-export default <Profile3>;
+export default Profile3;
