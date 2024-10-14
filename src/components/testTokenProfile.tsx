@@ -5,10 +5,6 @@ const Profile3 = () => {
   const [formData, setFormData] = useState({
     username: "", // 사용자 이름
     phoneNumber: "",
-    email: "", // 이메일
-    role: "", // 사용자 역할
-    profileImageUrl: "", // 프로필 이미지 URL
-    userImage: null, // 업로드된 이미지 파일
   });
 
   const [loading, setLoading] = useState(true); // 데이터를 불러오는 중 상태 관리
@@ -80,23 +76,20 @@ const Profile3 = () => {
       }
 
       // FormData 생성 및 이미지 파일 추가
-      const updatedFormData = new FormData();
-      updatedFormData.append("username", formData.username);
-      updatedFormData.append("phoneNumber", formData.phoneNumber);
-      updatedFormData.append("email", formData.email);
-      updatedFormData.append("role", formData.role);
-      if (formData.userImage) {
-        updatedFormData.append("userImage", formData.userImage); // 이미지 파일 추가
-      }
+      // const updatedFormData = new FormData();
+      // updatedFormData.append("username", formData.username);
+      // updatedFormData.append("phoneNumber", formData.phoneNumber);
 
       // 프로필 업데이트 API 호출
-      const response = await axios.put(
-        "https://api.example.com/api/user/profile", // 실제 API URL로 변경
-        updatedFormData,
+      const response = await axios.patch(
+        "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api/user/update",
+        {
+          username: formData.username,
+          phoneNumber: formData.phoneNumber,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // 헤더 설정
           },
         }
       );

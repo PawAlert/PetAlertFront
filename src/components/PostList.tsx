@@ -10,7 +10,7 @@ const PostList = () => {
       views: 111115,
       imageUrl: "https://via.placeholder.com/60",
       profile: {
-        name: "바디",
+        name: "버디",
         age: "5",
         gender: "남자",
         microchip: "123456789101112131415",
