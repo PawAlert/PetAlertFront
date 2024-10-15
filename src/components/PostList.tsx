@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import axios from "axios";
 
 const PostList = () => {
   // Sample posts data
@@ -61,6 +62,78 @@ const PostList = () => {
     setSelectedProfile(profile);
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingProfile, setEditingProfile] = useState({ ...selectedProfile });
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [deletePhotoIds, setDeletePhotoIds] = useState([]);
+  const fileInputRef = useRef(null);
+
+  const toggleEditMode = () => {
+    if (isEditing) {
+      updateProfile();
+    } else {
+      setEditingProfile({ ...selectedProfile });
+      setSelectedImages([]);
+      setDeletePhotoIds([]);
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditingProfile((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    setSelectedImages([...e.target.files]);
+  };
+
+  const handleDeleteImage = (imageId) => {
+    setDeletePhotoIds((prev) => [...prev, imageId]);
+  };
+
+  const updateProfile = async () => {
+    const formData = new FormData();
+    const petUpdateDto = {
+      petId: editingProfile.id,
+      petName: editingProfile.name,
+      species: editingProfile.species,
+      breed: editingProfile.breed,
+      color: editingProfile.color,
+      gender: editingProfile.gender,
+      microchipId: editingProfile.microchip,
+      neutering: editingProfile.neutering,
+      age: parseInt(editingProfile.age),
+      deletePhotoIds: deletePhotoIds,
+    };
+
+    formData.append(
+      "petUpdateDto",
+      new Blob([JSON.stringify(petUpdateDto)], { type: "application/json" })
+    );
+
+    selectedImages.forEach((image) => {
+      formData.append("petImage", image);
+    });
+
+    try {
+      const response = await axios.put("/api/pets/update", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200) {
+        setSelectedProfile(response.data);
+        alert("프로필이 성공적으로 업데이트되었습니다.");
+      }
+    } catch (error) {
+      console.error("프로필 업데이트 중 오류 발생:", error);
+      alert("프로필 업데이트에 실패했습니다.");
+    }
+  };
+
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Main Content */}
@@ -100,34 +173,143 @@ const PostList = () => {
           <div className="bg-white p-6 rounded-md shadow-md">
             <h2 className="text-xl font-semibold mb-4">프로필 정보</h2>
             <div className="space-y-2">
-              <p>
-                <strong>이름:</strong> {selectedProfile.name}
-              </p>
-              <p>
-                <strong>나이:</strong> {selectedProfile.age}세
-              </p>
-              <p>
-                <strong>성별:</strong> {selectedProfile.gender}
-              </p>
-              <p>
-                <strong>마이크로칩:</strong> {selectedProfile.microchip}
-              </p>
-              <img
-                src={selectedProfile.profileImage}
-                alt="Pet"
-                className="w-40 h-40 rounded-md object-cover mt-4"
-              />
-              <div className="mt-4 space-y-2">
-                <p>
-                  <strong>연락처:</strong> {selectedProfile.contact}
-                </p>
-                <p>
-                  <strong>위치:</strong> {selectedProfile.location}
-                </p>
-              </div>
+              {isEditing ? (
+                <>
+                  <input
+                    name="name"
+                    value={editingProfile.name}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="age"
+                    value={editingProfile.age}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="gender"
+                    value={editingProfile.gender}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="microchip"
+                    value={editingProfile.microchip}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="species"
+                    value={editingProfile.species}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="breed"
+                    value={editingProfile.breed}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <input
+                    name="color"
+                    value={editingProfile.color}
+                    onChange={handleInputChange}
+                    className="border p-1 w-full"
+                  />
+                  <div>
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="neutering"
+                        checked={editingProfile.neutering}
+                        onChange={(e) =>
+                          setEditingProfile((prev) => ({
+                            ...prev,
+                            neutering: e.target.checked,
+                          }))
+                        }
+                      />
+                      중성화 여부
+                    </label>
+                  </div>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    multiple
+                    className="mt-2"
+                  />
+                  <div className="mt-2">
+                    {selectedProfile.images &&
+                      selectedProfile.images.map((image, index) => (
+                        <div
+                          key={index}
+                          className="inline-block mr-2 mb-2 relative"
+                        >
+                          <img
+                            src={image.url}
+                            alt={`Pet ${index}`}
+                            className="w-20 h-20 object-cover"
+                          />
+                          <button
+                            onClick={() => handleDeleteImage(image.id)}
+                            className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>이름:</strong> {selectedProfile.name}
+                  </p>
+                  <p>
+                    <strong>나이:</strong> {selectedProfile.age}세
+                  </p>
+                  <p>
+                    <strong>성별:</strong> {selectedProfile.gender}
+                  </p>
+                  <p>
+                    <strong>마이크로칩:</strong> {selectedProfile.microchip}
+                  </p>
+                  <p>
+                    <strong>종:</strong> {selectedProfile.species}
+                  </p>
+                  <p>
+                    <strong>품종:</strong> {selectedProfile.breed}
+                  </p>
+                  <p>
+                    <strong>색상:</strong> {selectedProfile.color}
+                  </p>
+                  <p>
+                    <strong>중성화 여부:</strong>{" "}
+                    {selectedProfile.neutering ? "예" : "아니오"}
+                  </p>
+                  <div className="mt-4">
+                    {selectedProfile.images &&
+                      selectedProfile.images.map((image, index) => (
+                        <img
+                          key={index}
+                          src={image.url}
+                          alt={`Pet ${index}`}
+                          className="w-20 h-20 object-cover inline-block mr-2 mb-2"
+                        />
+                      ))}
+                  </div>
+                </>
+              )}
             </div>
-            <button className="bg-green-500 text-white py-2 px-4 rounded-md mt-4">
-              Edit
+            <button
+              className={`${
+                isEditing ? "bg-blue-500" : "bg-green-500"
+              } text-white py-2 px-4 rounded-md mt-4`}
+              onClick={toggleEditMode}
+            >
+              {isEditing ? "저장" : "수정"}
             </button>
           </div>
         </div>

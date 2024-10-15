@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+// API 엔드포인트 URL 상수
+const API_BASE_URL =
+  "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api";
+
+// axios 인스턴스 생성
+const api = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+// 토큰 가져오기 함수
+const getToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("토큰이 존재하지 않습니다. 로그인이 필요합니다.");
+  }
+  return token;
+};
+
 const Profile3 = () => {
   const [formData, setFormData] = useState({
     username: "", // 사용자 이름
@@ -13,28 +31,21 @@ const Profile3 = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
-        if (!token) {
-          alert("토큰이 존재하지 않습니다. 로그인이 필요합니다.");
-          return;
-        }
-
-        const response = await axios.get(
-          "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api/user/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await api.get("/user/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const profileData = response.data.data;
+        console.log(profileData);
         setFormData({
           username: profileData.userName,
           phoneNumber: profileData.phoneNumber,
           email: profileData.email,
-          role: profileData.UserRoles,
+          role: profileData.userRoles,
           profileImageUrl: profileData.profileImageUrl,
           userImage: null, // 초기 값은 null
         });
@@ -68,21 +79,10 @@ const Profile3 = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
 
-      if (!token) {
-        alert("토큰이 존재하지 않습니다. 로그인이 필요합니다.");
-        return;
-      }
-
-      // FormData 생성 및 이미지 파일 추가
-      // const updatedFormData = new FormData();
-      // updatedFormData.append("username", formData.username);
-      // updatedFormData.append("phoneNumber", formData.phoneNumber);
-
-      // 프로필 업데이트 API 호출
-      const response = await axios.patch(
-        "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api/user/update",
+      const response = await api.patch(
+        "/user/update",
         {
           username: formData.username,
           phoneNumber: formData.phoneNumber,
