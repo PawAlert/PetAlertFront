@@ -1,26 +1,32 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { useAuth } from '../../features/auth/Login/customHook/useAuth';
 
 const MyPage: React.FC = () => {
-    // 경로 지정
+    const { userInfo } = useAuth();
+    const isAdmin = userInfo?.userRoles === 'ROLE_ADMIN';
+    const isOfficialUser = userInfo?.userRoles === 'ROLE_OFFICIAL_USER';
+
     const menuItems = [
         { text: '프로필', route: 'profile' },
         { text: '내가 작성한 글', route: 'post' },
         { text: '찜 글', route: 'favorites' },
         { text: '문의하기', route: 'contact' },
         { text: '내 채팅목록', route: 'chatList' },
+        ...(isAdmin ? [{ text: '문의 목록', route: 'inquiries' }] : []),
+        ...(isOfficialUser || isAdmin ? [{ text: '입양글 목록', route: 'adoptionPosts' }] : []),
+        { text: '관계자 등록', route: 'officialRegistration' },
     ];
 
     return (
         <div className="flex">
-            {/* Sidebar */}
             <div className="w-1/4 p-4 bg-gray-100">
                 <nav>
                     <ul>
                         {menuItems.map((item) => (
                             <li key={item.route} className="mb-2">
                                 <NavLink
-                                    to={item.route} // 상대 경로로 설정
+                                    to={item.route}
                                     className={({ isActive }) =>
                                         isActive ? "text-blue-600" : "text-gray-600 hover:text-blue-600"
                                     }

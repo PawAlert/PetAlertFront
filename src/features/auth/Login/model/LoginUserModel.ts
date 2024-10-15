@@ -10,9 +10,9 @@ export interface UserInfo {
     uid: string;
     email: string;
     userName: string;
-    // 필요한 다른 사용자 정보 필드
+    userRoles: string;
+    // 다른 필요한 필드들...
 }
-
 export interface LoginUserModel {
 
     email: string;
