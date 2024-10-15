@@ -13,6 +13,8 @@ export const createAnnouncement = async (announcementData: CreateAnnouncementDto
                 }
             }
         );
+
+
         return response.data;
     } catch (error) {
         console.error('Failed to create announcement:', error);
