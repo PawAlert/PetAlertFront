@@ -40,11 +40,7 @@ const Header = () => {
                       Login
                     </h2>
                   </Link>
-                  <Link to="/mypage/profile">
-                    <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
-                      MyPage
-                    </h2>
-                  </Link>
+              
                 </>
             )}
             <AdoptionDropdown />

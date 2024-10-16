@@ -19,17 +19,23 @@ export const MissingPostList: React.FC = () => {
     setParams({ page: selectedItem.selected });
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         Loading...
       </div>
     );
-  if (error)
+  }
+
+  if (error) {
     return (
       <div className="text-red-500">Error: {(error as Error).message}</div>
     );
-  if (!data) return null;
+  }
+
+  if (!data || !data.content || !Array.isArray(data.content)) {
+    return <div className="text-red-500">데이터를 불러오는 데 문제가 발생했습니다.</div>;
+  }
 
   return (
     <div className="container mx-auto px-4">
@@ -39,33 +45,35 @@ export const MissingPostList: React.FC = () => {
           <MissingPostCard key={post.missingReportId} post={post} />
         ))}
       </div>
-      <ReactPaginate
-        previousLabel={"이전"}
-        nextLabel={"다음"}
-        breakLabel={"..."}
-        pageCount={data.totalPages}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageChange}
-        containerClassName={"pagination flex justify-center mt-4 space-x-2"}
-        pageClassName={
-          "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
-        }
-        pageLinkClassName={"page-link"}
-        previousClassName={
-          "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
-        }
-        previousLinkClassName={"page-link"}
-        nextClassName={
-          "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
-        }
-        nextLinkClassName={"page-link"}
-        breakClassName={
-          "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
-        }
-        breakLinkClassName={"page-link"}
-        activeClassName={"bg-blue-50 border-blue-500 text-blue-600 z-10"}
-      />
+      {data.totalPages > 0 && (
+        <ReactPaginate
+          previousLabel={"이전"}
+          nextLabel={"다음"}
+          breakLabel={"..."}
+          pageCount={data.totalPages}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageChange}
+          containerClassName={"pagination flex justify-center mt-4 space-x-2"}
+          pageClassName={
+            "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+          }
+          pageLinkClassName={"page-link"}
+          previousClassName={
+            "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+          }
+          previousLinkClassName={"page-link"}
+          nextClassName={
+            "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+          }
+          nextLinkClassName={"page-link"}
+          breakClassName={
+            "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 text-sm font-medium"
+          }
+          breakLinkClassName={"page-link"}
+          activeClassName={"bg-blue-50 border-blue-500 text-blue-600 z-10"}
+        />
+      )}
     </div>
   );
 };
