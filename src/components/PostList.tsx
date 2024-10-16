@@ -79,13 +79,15 @@ const PostList = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditingProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    setSelectedImages([...e.target.files]);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedImages(Array.from(e.target.files));
+    }
   };
 
   const handleDeleteImage = (imageId) => {
@@ -128,7 +130,7 @@ const PostList = () => {
         setSelectedProfile(response.data);
         alert("프로필이 성공적으로 업데이트되었습니다.");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("프로필 업데이트 중 오류 발생:", error);
       alert("프로필 업데이트에 실패했습니다.");
     }

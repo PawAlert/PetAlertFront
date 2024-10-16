@@ -27,7 +27,7 @@ const Profile3 = () => {
   });
 
   const [loading, setLoading] = useState(true); // 데이터를 불러오는 중 상태 관리
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
