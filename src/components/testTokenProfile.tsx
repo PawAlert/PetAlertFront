@@ -23,6 +23,7 @@ const Profile3 = () => {
   const [formData, setFormData] = useState({
     username: "", // 사용자 이름
     phoneNumber: "",
+    userImage: null as File | null, // 파일 타입 추가
   });
 
   const [loading, setLoading] = useState(true); // 데이터를 불러오는 중 상태 관리
@@ -60,7 +61,7 @@ const Profile3 = () => {
     fetchProfile();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -69,14 +70,18 @@ const Profile3 = () => {
   };
 
   // 이미지 선택 시 처리하는 함수
-  const handleImageChange = (e) => {
-    setFormData({
-      ...formData,
-      userImage: e.target.files[0], // 선택된 파일을 저장
-    });
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFormData({
+        ...formData,
+        userImage: file,
+        profileImageUrl: URL.createObjectURL(file),
+      });
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const token = getToken();
@@ -102,59 +107,66 @@ const Profile3 = () => {
     }
   };
 
-  const handleImageUpdate = () => {
-    // 이미지 업데이트 로직 추가
-    alert("이미지 업데이트 기능은 여기에 추가하세요.");
+  // 이미지 업데이트 함수
+  const handleImageUpdate = async () => {
+    if (!formData.userImage) {
+      alert("업로드할 이미지를 선택해주세요.");
+      return;
+    }
+
+    try {
+      const token = getToken();
+      const formDataToSend = new FormData();
+      formDataToSend.append("userImage", formData.userImage);
+
+      const response = await api.patch(
+        "/user/updateProfileImage",
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("이미지 업데이트 성공:", response.data);
+      alert("프로필 이미지가 성공적으로 업데이트되었습니다.");
+    } catch (error) {
+      console.error("이미지 업데이트 실패:", error);
+      alert("이미지 업데이트 중 문제가 발생했습니다.");
+    }
   };
-
-  if (loading) {
-    return <div>프로필 정보를 불러오는 중입니다...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-md shadow-lg">
       <h1 className="text-2xl font-semibold mb-6">프로필</h1>
 
       <div className="flex items-center mb-6">
-        {/* Profile Image */}
         <div className="relative">
           <img
-            src={formData.profileImageUrl || "https://via.placeholder.com/80"}
+            src={formData.profileImageUrl || "/default-profile.png"}
             alt="Profile"
-            className="w-20 h-20 rounded-full object-cover"
+            className="w-20 h-20 rounded-full object-cover cursor-pointer"
+            onClick={() => document.getElementById("fileInput").click()}
           />
-          <label className="absolute bottom-0 right-0 bg-gray-200 p-1 rounded-full cursor-pointer">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-500"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm10 4a1 1 0 011 1v6a1 1 0 11-2 0V8a1 1 0 011-1zM9 9a1 1 0 100 2h2a1 1 0 100-2H9z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange} // 이미지 변경 핸들러 추가
-            />
-          </label>
+          <input
+            id="fileInput"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
         </div>
 
-        <div className="ml-6 space-x-4">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-md">
+        <div className="ml-6">
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded-md"
+            onClick={handleImageUpdate}
+            type="button"
+            disabled={!formData.userImage}
+          >
             이미지 업데이트
-          </button>
-          <button className="bg-gray-500 text-white py-2 px-4 rounded-md">
-            프로필 삭제하기
           </button>
         </div>
       </div>
