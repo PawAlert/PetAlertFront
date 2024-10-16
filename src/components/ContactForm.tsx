@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -10,8 +10,8 @@ const ContactForm = () => {
   });
 
   const [error, setError] = useState("");
-
-  const handleChange = (e) => {
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -20,7 +20,7 @@ const ContactForm = () => {
     setError(""); // 입력할 때마다 에러 메시지를 초기화합니다.
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // 이메일이나 전화번호 둘 중 하나는 필수로 입력해야 함
