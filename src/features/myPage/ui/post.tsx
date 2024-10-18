@@ -1,6 +1,6 @@
 // src/pages/Home.tsx
 import React from "react";
-import PostList from "../../../components/PostList";
+import PostList from "../../postList/PostList";
 
 const Post: React.FC = () => {
   return (

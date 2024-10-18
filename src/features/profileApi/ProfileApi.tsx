@@ -19,15 +19,28 @@ const getToken = () => {
   return token;
 };
 
+// FormData 타입 정의
+interface FormData {
+  username: string;
+  phoneNumber: string;
+  email: string;
+  role: string;
+  profileImageUrl: string;
+  userImage: File | null;
+}
+
 const Profile3 = () => {
-  const [formData, setFormData] = useState({
-    username: "", // 사용자 이름
+  const [formData, setFormData] = useState<FormData>({
+    username: "",
     phoneNumber: "",
-    userImage: null as File | null, // 파일 타입 추가
+    email: "",
+    role: "",
+    profileImageUrl: "",
+    userImage: null,
   });
 
-  const [loading, setLoading] = useState(true); // 데이터를 불러오는 중 상태 관리
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true as boolean);
+  const [error, setError] = useState(null as string | null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -148,7 +161,11 @@ const Profile3 = () => {
             src={formData.profileImageUrl || "/default-profile.png"}
             alt="Profile"
             className="w-20 h-20 rounded-full object-cover cursor-pointer"
-            onClick={() => document.getElementById("fileInput").click()}
+            onClick={() =>
+              (
+                document.getElementById("fileInput") as HTMLInputElement
+              )?.click()
+            }
           />
           <input
             id="fileInput"

@@ -1,9 +1,36 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 
+// Profile 인터페이스 정의
+interface Profile {
+  id?: number;
+  name: string;
+  age: string;
+  gender: string;
+  microchip: string;
+  contact: string;
+  location: string;
+  profileImage: string;
+  species?: string;
+  breed?: string;
+  color?: string;
+  neutering?: boolean;
+  images?: { id: number; url: string }[];
+}
+
+// Post 인터페이스 정의
+interface Post {
+  id: number;
+  title: string;
+  address: string;
+  views: number;
+  imageUrl: string;
+  profile: Profile;
+}
+
 const PostList = () => {
   // Sample posts data
-  const posts = [
+  const posts: Post[] = [
     {
       id: 1,
       title: "잃어버린 강아지를 찾습니다.",
@@ -55,18 +82,22 @@ const PostList = () => {
   ];
 
   // State to track the selected post
-  const [selectedProfile, setSelectedProfile] = useState(posts[0].profile);
+  const [selectedProfile, setSelectedProfile] = useState<Profile>(
+    posts[0].profile
+  );
 
   // Function to handle post click
-  const handlePostClick = (profile) => {
+  const handlePostClick = (profile: Profile) => {
     setSelectedProfile(profile);
   };
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editingProfile, setEditingProfile] = useState({ ...selectedProfile });
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [deletePhotoIds, setDeletePhotoIds] = useState([]);
-  const fileInputRef = useRef(null);
+  const [editingProfile, setEditingProfile] = useState<Profile>({
+    ...selectedProfile,
+  });
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [deletePhotoIds, setDeletePhotoIds] = useState<number[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleEditMode = () => {
     if (isEditing) {
@@ -90,7 +121,7 @@ const PostList = () => {
     }
   };
 
-  const handleDeleteImage = (imageId) => {
+  const handleDeleteImage = (imageId: number) => {
     setDeletePhotoIds((prev) => [...prev, imageId]);
   };
 
