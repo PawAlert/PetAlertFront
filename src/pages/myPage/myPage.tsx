@@ -58,7 +58,7 @@ const MyPage: React.FC = () => {
             default:
                 return [
                     ...commonItems,
-                    { text: '내가 작성한 글', route: 'myPosts' },
+                    { text: '내가 작성한 글', route: 'post' },
                     { text: '문의하기', route: 'contact' },
                     { text: '관계자 등록하기', route: 'officialRegistration' },
                 ];
