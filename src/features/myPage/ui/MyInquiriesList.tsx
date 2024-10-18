@@ -8,24 +8,24 @@ const MyInquiriesList: React.FC = () => {
     const [inquiries, setInquiries] = useState<InquiryDetail[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const { userInfo } = useAuth();
+    const { userInfo, userInfoLoading } = useAuth();
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (userInfo?.uid === 'bc50a30d-8da4-4d10-a5a9-6bba1b4c2b6e') {
+        if (!userInfoLoading && userInfo?.userRoles === 'ROLE_ADMIN') {
             fetchInquiries();
-        } else {
+        } else if (!userInfoLoading) {
             setError('접근 권한이 없습니다.');
             setIsLoading(false);
         }
-    }, [page, userInfo]);
+    }, [page, userInfo, userInfoLoading]);
 
     const fetchInquiries = async () => {
         try {
             setIsLoading(true);
             const response: MyInquiriesResponse = await getMyInquiries(page);
-            setInquiries(response.data.content as InquiryDetail[]); // Type assertion
+            setInquiries(response.data.content as InquiryDetail[]);
             setTotalPages(response.data.totalPages);
             setIsLoading(false);
         } catch (error) {
@@ -35,8 +35,9 @@ const MyInquiriesList: React.FC = () => {
         }
     };
 
-    if (isLoading) return <div>로딩 중...</div>;
+    if (userInfoLoading || isLoading) return <div>로딩 중...</div>;
     if (error) return <div className="text-red-500">{error}</div>;
+    if (userInfo?.userRoles !== 'ROLE_ADMIN') return <div>접근 권한이 없습니다.</div>;
     if (!inquiries || inquiries.length === 0) return <div>문의 내역이 없습니다.</div>;
 
     return (
