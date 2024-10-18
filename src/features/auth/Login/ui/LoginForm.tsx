@@ -25,6 +25,7 @@ export const LoginForm: React.FC = () => {
                     const userProfile = await fetchUserProfile();
                     localStorage.setItem('uid', userProfile.uid);
                     navigate('/');
+
                 } catch (error) {
                     console.error('Failed to fetch user profile:', error);
                 }
