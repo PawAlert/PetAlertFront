@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SearchFilters, ActivityType } from "./types.ts";
+import { SearchFilters } from "./types.ts";
 
 interface VolunteerSearchStore {
     filters: SearchFilters;

@@ -4,6 +4,7 @@ import { VolunteerActivity } from "../model/types";
 
 interface VolunteerCardProps {
     activity: VolunteerActivity;
+    onClick: (activity: VolunteerActivity) => void;
 }
 
 export const VolunteerCard: React.FC<VolunteerCardProps> = React.memo(({ activity }) => {
