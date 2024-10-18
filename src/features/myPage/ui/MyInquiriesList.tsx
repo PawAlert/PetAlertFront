@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getMyInquiries } from '../api/getMyInquiries';
-import { Inquiry } from '../model/types';
+import { InquiryDetail, MyInquiriesResponse } from '../model/types';
 import { useAuth } from '../../auth/Login/customHook/useAuth';
 
 const MyInquiriesList: React.FC = () => {
-    const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+    const [inquiries, setInquiries] = useState<InquiryDetail[]>([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const { userInfo } = useAuth();
@@ -24,8 +24,8 @@ const MyInquiriesList: React.FC = () => {
     const fetchInquiries = async () => {
         try {
             setIsLoading(true);
-            const response = await getMyInquiries(page);
-            setInquiries(response.data.content);
+            const response: MyInquiriesResponse = await getMyInquiries(page);
+            setInquiries(response.data.content as InquiryDetail[]); // Type assertion
             setTotalPages(response.data.totalPages);
             setIsLoading(false);
         } catch (error) {
