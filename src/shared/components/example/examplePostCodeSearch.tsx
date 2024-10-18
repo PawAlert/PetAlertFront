@@ -21,7 +21,7 @@ const AddressSearchExample: React.FC = () => {
                 <div className="mt-4 p-4 border rounded-md">
                     <h2 className="text-xl font-semibold mb-2">선택된 주소 정보</h2>
                     <p><strong>우편번호:</strong> {selectedAddress.postcode}</p>
-                    <p><strong>주소:</strong> {selectedAddress.address}</p>
+                    {/*<p><strong>주소:</strong> {selectedAddress.address}</p>*/}
                     <p><strong>상세주소:</strong> {selectedAddress.addressDetail}</p>
                     <p><strong>위도:</strong> {selectedAddress.latitude}</p>
                     <p><strong>경도:</strong> {selectedAddress.longitude}</p>

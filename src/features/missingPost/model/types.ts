@@ -1,4 +1,4 @@
-import {LocationRecord} from "../../../shared/location.ts";
+import { LocationRecord } from "../../../shared/location.ts";
 
 export interface MissingReportData {
     missingTitle: string;
@@ -7,27 +7,25 @@ export interface MissingReportData {
     emergencyContact1: string;
     emergencyContact2: string;
     petAdditionalInfo: string;
-    status: 'MISSING' | 'FOUND' | 'CLOSED';
+    status: 'MISSING' | 'FOUND' | 'TEMPORARY_CARE' | 'CLOSED';
     microchipId: string;
     missingPetName: string;
     missingSpecies: string;
     missingPetColor: string;
     missingPetAge: number;
-    MissingPetGender: string;
+    missingPetGender: string;
     missingPetDescription: string;
     missingPetImages: string[];
     locationRecord: LocationRecord;
 }
 
-export interface MissingPostData {
+export interface MissingPost {
     missingReportId: number;
     missingTitle: string;
     petName: string;
-    address: string;
-    addressDetail: string;
-    missingStatus: string;
+    locationRecord: LocationRecord;
     dateLost: number[];
-    petImageUrls: string;
+    petImageUrl: string;
 }
 
 export interface PaginationInfo {
@@ -38,14 +36,14 @@ export interface PaginationInfo {
 }
 
 export interface MissingPostsResponse {
-    content: MissingPostData[];
+    content: MissingPost[];
     pageable: {
         pageNumber: number;
         pageSize: number;
         sort: {
-            empty: boolean;
             sorted: boolean;
             unsorted: boolean;
+            empty: boolean;
         };
         offset: number;
         paged: boolean;
@@ -54,45 +52,41 @@ export interface MissingPostsResponse {
     last: boolean;
     totalElements: number;
     totalPages: number;
+    first: boolean;
+    numberOfElements: number;
     size: number;
     number: number;
     sort: {
-        empty: boolean;
         sorted: boolean;
         unsorted: boolean;
+        empty: boolean;
     };
-    first: boolean;
-    numberOfElements: number;
     empty: boolean;
 }
 
 export interface FetchMissingPostsParams {
     page: number;
-    sortDirection: 'ASC' | 'DESC';
-    statusFilter: 'MISSING' | 'FOUND' | '';
+    size?: number;
+    sortDirection?: 'ASC' | 'DESC';
+    statusFilter?: 'MISSING' | 'FOUND' | 'TEMPORARY_CARE' | 'CLOSED' | '';
+    sort?: string;
+    status: string;
 }
 
 export interface MissingPostDetailData {
-    userName: string;
+    userName: string | null;
     userUid: string;
-    phoneNumber: string;
+    phoneNumber: string | null;
     isMine: boolean;
     missingReportId: number;
     title: string;
     content: string;
     dateLost: number[];
-    location: {
-        postcode: string;
-        address: string;
-        addressDetail: string;
-        latitude: number;
-        longitude: number;
-    };
+    location: LocationRecord;
     description: string;
     missingStatus: string;
     petName: string;
     petSpecies: string;
-    neutering: boolean;
     color: string;
     age: number;
     gender: string;

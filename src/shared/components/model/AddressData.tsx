@@ -1,7 +1,10 @@
 export interface AddressData {
     postcode: string;
-    address: string;
+    province: string;
+    city: string;
+    district: string;
+    street: string;
     addressDetail: string;
-    latitude: string | number;
-    longitude: string | number;
+    latitude: number;
+    longitude: number;
 }

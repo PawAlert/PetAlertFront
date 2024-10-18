@@ -4,20 +4,14 @@ import { createAnnouncement } from '../api/createAnnouncement';
 import { CreateAnnouncementDto } from '../model/types';
 import { useNavigate } from 'react-router-dom';
 import {MultiImageUploader} from "../../../shared/components/ImageUploader.tsx";
-import {AddressData} from "../../../shared/components/model/AddressData.tsx";
 import { PostCodeSearch } from '../../../shared/components/PostCodeSearch';
+import {DEFAULT_LOCATION_RECORD, LocationRecord} from "../../../shared/location.ts";
 const CreateAnnouncementForm: React.FC = () => {
     const [formData, setFormData] = useState<CreateAnnouncementDto>({
         title: '',
         content: '',
         shelterName: '',
-        shelterLocation: {
-            postcode: '',
-            address: '',
-            addressDetail: '',
-            latitude: 0,
-            longitude: 0,
-        },
+        shelterLocation: DEFAULT_LOCATION_RECORD,
         animalType: '',
         breed: '',
         animalName: '',
@@ -81,13 +75,10 @@ const CreateAnnouncementForm: React.FC = () => {
         setFormData((prev) => ({ ...prev, imageUrls: urls }));
     };
 
-    const handleAddressSelect = (addressData: AddressData) => {
+    const handleAddressSelect = (locationData: LocationRecord) => {
         setFormData((prev) => ({
             ...prev,
-            shelterLocation: {
-                ...prev.shelterLocation,
-                ...addressData
-            }
+            shelterLocation: locationData
         }));
     };
 
@@ -157,7 +148,7 @@ const CreateAnnouncementForm: React.FC = () => {
                     <input
                         type="text"
                         name="shelterLocation.address"
-                        value={formData.shelterLocation.address}
+                        value={`${formData.shelterLocation.province} ${formData.shelterLocation.city} ${formData.shelterLocation.district} ${formData.shelterLocation.street}`}
                         onChange={handleInputChange}
                         readOnly
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"

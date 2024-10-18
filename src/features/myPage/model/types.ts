@@ -39,7 +39,7 @@ export interface MyInquiriesResponse {
     };
 }
 
-export interface Inquiry {
+export interface InquiryDetail {
     id: number;
     type: string;
     name: string;

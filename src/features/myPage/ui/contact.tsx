@@ -1,4 +1,4 @@
-// src/pages/Home.tsx
+// src/pages/MainPage.tsx
 import React from "react";
 import ContactForm from "../../contact/ContactForm";
 const Contact: React.FC = () => {

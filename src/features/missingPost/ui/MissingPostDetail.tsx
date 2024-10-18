@@ -1,28 +1,23 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { MissingPostDetailData } from '../model/types';
 import { useAuth } from '../../auth/Login/customHook/useAuth';
 import { createChatRoom } from '../../chat/api/chatApi';
-
-const fetchMissingPostDetail = async (id: string): Promise<MissingPostDetailData> => {
-    const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}/api/missing/getdetail/${id}`);
-    return response.data.data;
-};
+import { fetchMissingPostDetail } from "../api/missingReportApi.ts";
 
 const MissingPostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { isLoggedIn, userInfo, userInfoLoading } = useAuth();
-    const { data, isLoading, error } = useQuery({
+    const { data, isLoading, error } = useQuery<MissingPostDetailData, Error>({
         queryKey: ['missingPostDetail', id],
         queryFn: () => fetchMissingPostDetail(id!),
         enabled: !!id
     });
 
     const handleStartChat = async () => {
-        if (data && isLoggedIn && userInfo) {
+        if (data && isLoggedIn && userInfo && !data.isMine) {
             try {
                 const chatRoom = await createChatRoom(id!, data.userUid);
                 navigate(`/chat/${chatRoom.id}`, { state: { receiverUid: data.userUid } });
@@ -37,7 +32,7 @@ const MissingPostDetail: React.FC = () => {
     };
 
     if (isLoading || userInfoLoading) return <div>Loading...</div>;
-    if (error) return <div>An error has occurred</div>;
+    if (error) return <div>An error has occurred: {error.message}</div>;
     if (!data || !userInfo) return null;
 
     return (
@@ -51,10 +46,11 @@ const MissingPostDetail: React.FC = () => {
                     <p><strong>Color:</strong> {data.color}</p>
                     <p><strong>Age:</strong> {data.age}</p>
                     <p><strong>Gender:</strong> {data.gender}</p>
+                    <p><strong>Microchip ID:</strong> {data.microchipId}</p>
                 </div>
                 <p className="mb-4"><strong>Description:</strong> {data.petDescription}</p>
                 <p className="mb-4"><strong>Date Lost:</strong> {data.dateLost.join('-')}</p>
-                <p className="mb-4"><strong>Location:</strong> {data.location.address} {data.location.addressDetail}</p>
+                <p className="mb-4"><strong>Location:</strong> {`${data.location.province} ${data.location.city} ${data.location.district} ${data.location.street} ${data.location.addressDetail}`}</p>
                 <p className="mb-4"><strong>Content:</strong> {data.content}</p>
                 <div className="mb-4">
                     <strong>Images:</strong>

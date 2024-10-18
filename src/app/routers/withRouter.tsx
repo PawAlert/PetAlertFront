@@ -1,6 +1,6 @@
 import {createBrowserRouter} from "react-router-dom";
 import Index from "../index.tsx";
-import Home from "../../features/myPage/ui/Home.tsx";
+import Home from "../../pages/main/MainPage.tsx";
 import Profile from "../../features/myPage/ui/profile.tsx";
 import MyPage from "../../pages/myPage/myPage.tsx";
 import Post from "../../features/myPage/ui/post.tsx";
@@ -9,9 +9,6 @@ import Contact from "../../features/myPage/ui/contact.tsx";
 import ChatList from "../../features/myPage/ui/chatList.tsx";
 import {SignupForm} from "../../features/auth/signup/ui/SignupForm.tsx";
 import LoginPage from "../../pages/login/login.tsx";
-import ExamplePage from "../../shared/components/example/ExamplePage.tsx";
-import ExampleImageUpload from "../../shared/components/example/exampleImageUploader.tsx";
-import AddressSearchExample from "../../shared/components/example/examplePostCodeSearch.tsx";
 import MissingReportFormPage from "../../pages/missingPost/MissingReportPage.tsx";
 import MissingPostListPage from "../../pages/missingPost/missingPostPage.tsx";
 import MissingPostDetail from "../../features/missingPost/ui/MissingPostDetail.tsx";
@@ -24,6 +21,11 @@ import InquiryDetailView from "../../features/myPage/ui/InquiryDetailView.tsx";
 import AdoptionPostsList from "../../features/adoption/ui/AdoptionPostsList.tsx";
 import CreateAnnouncementPage from "../../pages/Adoption/CreateAnnouncementPage.tsx";
 import OfficialRegistrationPage from "../../pages/OfficialRegistration/ OfficialRegistrationPage.tsx";
+import VolunteerSearchPage from "../../pages/VolunteerSearchPage/VolunteerSearchPage.tsx";
+import {VolunteerDetailPage} from "../../pages/VolunteerSearchPage/VolunteerDetailPage.tsx";
+import VolunteerReviewsPage from "../../pages/VolunteerSearchPage/VolunteerReviewsPage.tsx";
+
+
 
 const withRouter = createBrowserRouter([
     {
@@ -82,11 +84,11 @@ const withRouter = createBrowserRouter([
                 ]
             },
             {
-                path: "example",
-                element: <ExamplePage/>,
+                path: "volunteer",
                 children: [
-                    {path: "imageUploader", element: <ExampleImageUpload/>},
-                    {path: "postCodeSearch", element: <AddressSearchExample/>},
+                    { path: "", element: <VolunteerSearchPage /> },
+                    { path: ":id", element: <VolunteerDetailPage /> },
+                    { path: "reviews", element: <VolunteerReviewsPage /> },
                 ]
             },
             //채팅 라우터

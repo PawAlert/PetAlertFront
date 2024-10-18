@@ -1,4 +1,4 @@
-// src/pages/Home.tsx
+// src/pages/MainPage.tsx
 import React from 'react';
 
 const Favorites: React.FC = () => {

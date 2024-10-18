@@ -3,7 +3,7 @@ import axios from "axios";
 
 // API 엔드포인트 URL 상수
 const API_BASE_URL =
-  "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api";
+    "https://port-0-pawalertbackendteamgroup-m06zwfj8628a2164.sel4.cloudtype.app/api";
 
 // axios 인스턴스 생성
 const api = axios.create({
@@ -39,8 +39,8 @@ const Profile3 = () => {
     userImage: null,
   });
 
-  const [loading, setLoading] = useState(true as boolean);
-  const [error, setError] = useState(null as string | null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -100,16 +100,16 @@ const Profile3 = () => {
       const token = getToken();
 
       const response = await api.patch(
-        "/user/update",
-        {
-          username: formData.username,
-          phoneNumber: formData.phoneNumber,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+          "/user/update",
+          {
+            username: formData.username,
+            phoneNumber: formData.phoneNumber,
           },
-        }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
       );
 
       console.log("프로필 업데이트 성공:", response.data);
@@ -133,14 +133,14 @@ const Profile3 = () => {
       formDataToSend.append("userImage", formData.userImage);
 
       const response = await api.patch(
-        "/user/updateProfileImage",
-        formDataToSend,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+          "/user/updateProfileImage",
+          formDataToSend,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
       );
 
       console.log("이미지 업데이트 성공:", response.data);
@@ -151,103 +151,111 @@ const Profile3 = () => {
     }
   };
 
+  if (loading) {
+    return <div className="text-center py-10">로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-md shadow-lg">
-      <h1 className="text-2xl font-semibold mb-6">프로필</h1>
+      <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-md shadow-lg">
+        <h1 className="text-2xl font-semibold mb-6">프로필</h1>
 
-      <div className="flex items-center mb-6">
-        <div className="relative">
-          <img
-            src={formData.profileImageUrl || "/default-profile.png"}
-            alt="Profile"
-            className="w-20 h-20 rounded-full object-cover cursor-pointer"
-            onClick={() =>
-              (
-                document.getElementById("fileInput") as HTMLInputElement
-              )?.click()
-            }
-          />
-          <input
-            id="fileInput"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
+        <div className="flex items-center mb-6">
+          <div className="relative">
+            <img
+                src={formData.profileImageUrl || "/default-profile.png"}
+                alt="Profile"
+                className="w-20 h-20 rounded-full object-cover cursor-pointer"
+                onClick={() =>
+                    (
+                        document.getElementById("fileInput") as HTMLInputElement
+                    )?.click()
+                }
+            />
+            <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+            />
+          </div>
+
+          <div className="ml-6">
+            <button
+                className="bg-blue-500 text-white py-2 px-4 rounded-md"
+                onClick={handleImageUpdate}
+                type="button"
+                disabled={!formData.userImage}
+            >
+              이미지 업데이트
+            </button>
+          </div>
         </div>
 
-        <div className="ml-6">
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded-md"
-            onClick={handleImageUpdate}
-            type="button"
-            disabled={!formData.userImage}
-          >
-            이미지 업데이트
-          </button>
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name */}
+          <div>
+            <label className="block text-gray-700">이름</label>
+            <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          {/* Email - 고정값 */}
+          <div>
+            <label className="block text-gray-700">Email</label>
+            <input
+                type="email"
+                name="email"
+                value={formData.email}
+                readOnly
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+            />
+          </div>
+
+          {/* Mobile Number */}
+          <div>
+            <label className="block text-gray-700">Mobile Number</label>
+            <input
+                type="text"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
+            />
+          </div>
+
+          {/* Role - 고정값 */}
+          <div>
+            <label className="block text-gray-700">Role</label>
+            <input
+                type="text"
+                name="role"
+                value={formData.role}
+                readOnly
+                className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
+            />
+          </div>
+
+          {/* Save Button */}
+          <div>
+            <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            >
+              Save Change
+            </button>
+          </div>
+        </form>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Name */}
-        <div>
-          <label className="block text-gray-700">이름</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        {/* Email - 고정값 */}
-        <div>
-          <label className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            readOnly
-            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
-          />
-        </div>
-
-        {/* Mobile Number */}
-        <div>
-          <label className="block text-gray-700">Mobile Number</label>
-          <input
-            type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        {/* Role - 고정값 */}
-        <div>
-          <label className="block text-gray-700">Role</label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            readOnly
-            className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
-          />
-        </div>
-
-        {/* Save Button */}
-        <div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-          >
-            Save Change
-          </button>
-        </div>
-      </form>
-    </div>
   );
 };
 

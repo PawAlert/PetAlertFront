@@ -20,7 +20,7 @@ export const MissingReportForm: React.FC = () => {
         missingSpecies: '',
         missingPetColor: '',
         missingPetAge: 0,
-        MissingPetGender: '',
+        missingPetGender: '',
         missingPetDescription: '',
         missingPetImages: [],
         locationRecord: DEFAULT_LOCATION_RECORD,
@@ -45,10 +45,13 @@ export const MissingReportForm: React.FC = () => {
             locationRecord: {
                 ...formData.locationRecord,
                 postcode: addressData.postcode,
-                address: addressData.address,
+                province: addressData.province,
+                city: addressData.city,
+                district: addressData.district,
+                street: addressData.street,
                 addressDetail: addressData.addressDetail,
-                latitude: typeof addressData.latitude === 'string' ? parseFloat(addressData.latitude) : addressData.latitude,
-                longitude: typeof addressData.longitude === 'string' ? parseFloat(addressData.longitude) : addressData.longitude,
+                latitude: addressData.latitude,
+                longitude: addressData.longitude,
             }
         });
     };
@@ -86,9 +89,49 @@ export const MissingReportForm: React.FC = () => {
                     />
                 </div>
 
+                <div className="border rounded-md p-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">상태</label>
+                    <div className="flex items-center space-x-4">
+                        <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({...prev, status: 'MISSING'}))}
+                            className={`px-4 py-2 rounded-md ${
+                                formData.status === 'MISSING'
+                                    ? 'bg-red-500 text-white'
+                                    : 'bg-gray-200 text-gray-700'
+                            }`}
+                        >
+                            실종
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({...prev, status: 'FOUND'}))}
+                            className={`px-4 py-2 rounded-md ${
+                                formData.status === 'FOUND'
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-gray-200 text-gray-700'
+                            }`}
+                        >
+                            발견
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFormData(prev => ({...prev, status: 'TEMPORARY_CARE'}))}
+                            className={`px-4 py-2 rounded-md ${
+                                formData.status === 'TEMPORARY_CARE'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-gray-200 text-gray-700'
+                            }`}
+                        >
+                            임보
+                        </button>
+                    </div>
+                </div>
+
                 <div className="border rounded-md p-4 grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="missingPetName" className="block text-sm font-medium text-gray-700 mb-1">반려동물 이름</label>
+                        <label htmlFor="missingPetName" className="block text-sm font-medium text-gray-700 mb-1">반려동물
+                            이름</label>
                         <input
                             type="text"
                             name="missingPetName"
@@ -101,7 +144,8 @@ export const MissingReportForm: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="missingSpecies" className="block text-sm font-medium text-gray-700 mb-1">품종</label>
+                        <label htmlFor="missingSpecies"
+                               className="block text-sm font-medium text-gray-700 mb-1">품종</label>
                         <input
                             type="text"
                             name="missingSpecies"
@@ -117,7 +161,8 @@ export const MissingReportForm: React.FC = () => {
 
                 <div className="border rounded-md p-4 grid grid-cols-3 gap-4">
                     <div>
-                        <label htmlFor="missingPetColor" className="block text-sm font-medium text-gray-700 mb-1">색상</label>
+                        <label htmlFor="missingPetColor"
+                               className="block text-sm font-medium text-gray-700 mb-1">색상</label>
                         <input
                             type="text"
                             name="missingPetColor"
@@ -130,7 +175,8 @@ export const MissingReportForm: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="missingPetAge" className="block text-sm font-medium text-gray-700 mb-1">나이</label>
+                        <label htmlFor="missingPetAge"
+                               className="block text-sm font-medium text-gray-700 mb-1">나이</label>
                         <input
                             type="number"
                             name="missingPetAge"
@@ -143,11 +189,12 @@ export const MissingReportForm: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="MissingPetGender" className="block text-sm font-medium text-gray-700 mb-1">성별</label>
+                        <label htmlFor="missingPetGender"
+                               className="block text-sm font-medium text-gray-700 mb-1">성별</label>
                         <select
-                            id="MissingPetGender"
-                            name="MissingPetGender"
-                            value={formData.MissingPetGender}
+                            id="missingPetGender"
+                            name="missingPetGender"
+                            value={formData.missingPetGender}
                             onChange={handleChange}
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                             required
@@ -160,7 +207,8 @@ export const MissingReportForm: React.FC = () => {
                 </div>
 
                 <div className="border rounded-md p-4">
-                    <label htmlFor="missingPetDescription" className="block text-sm font-medium text-gray-700 mb-1">반려동물 특징</label>
+                    <label htmlFor="missingPetDescription" className="block text-sm font-medium text-gray-700 mb-1">반려동물
+                        특징</label>
                     <textarea
                         id="missingPetDescription"
                         name="missingPetDescription"
@@ -187,7 +235,8 @@ export const MissingReportForm: React.FC = () => {
 
                 <div className="border rounded-md p-4 grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="emergencyContact1" className="block text-sm font-medium text-gray-700 mb-1">긴급 연락처 1</label>
+                        <label htmlFor="emergencyContact1" className="block text-sm font-medium text-gray-700 mb-1">긴급
+                            연락처 1</label>
                         <input
                             type="tel"
                             name="emergencyContact1"
@@ -200,7 +249,8 @@ export const MissingReportForm: React.FC = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="emergencyContact2" className="block text-sm font-medium text-gray-700 mb-1">긴급 연락처 2</label>
+                        <label htmlFor="emergencyContact2" className="block text-sm font-medium text-gray-700 mb-1">긴급
+                            연락처 2</label>
                         <input
                             type="tel"
                             name="emergencyContact2"
@@ -214,7 +264,8 @@ export const MissingReportForm: React.FC = () => {
                 </div>
 
                 <div className="border rounded-md p-4">
-                    <label htmlFor="incidentDescription" className="block text-sm font-medium text-gray-700 mb-1">실종 상황 설명</label>
+                    <label htmlFor="incidentDescription" className="block text-sm font-medium text-gray-700 mb-1">실종 상황
+                        설명</label>
                     <textarea
                         id="incidentDescription"
                         name="incidentDescription"
@@ -228,7 +279,8 @@ export const MissingReportForm: React.FC = () => {
                 </div>
 
                 <div className="border rounded-md p-4">
-                    <label htmlFor="petAdditionalInfo" className="block text-sm font-medium text-gray-700 mb-1">추가 정보</label>
+                    <label htmlFor="petAdditionalInfo" className="block text-sm font-medium text-gray-700 mb-1">추가
+                        정보</label>
                     <textarea
                         id="petAdditionalInfo"
                         name="petAdditionalInfo"
@@ -251,12 +303,12 @@ export const MissingReportForm: React.FC = () => {
                             className="flex-1 rounded-none rounded-l-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="우편번호"
                         />
-                        <PostCodeSearch onAddressSelect={handleAddressSelect} />
+                        <PostCodeSearch onAddressSelect={handleAddressSelect}/>
                     </div>
                     <input
                         type="text"
                         name="address"
-                        value={formData.locationRecord.address}
+                        value={`${formData.locationRecord.province} ${formData.locationRecord.city} ${formData.locationRecord.district} ${formData.locationRecord.street}`}
                         readOnly
                         className="mt-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                         placeholder="주소"
@@ -273,16 +325,18 @@ export const MissingReportForm: React.FC = () => {
 
                 <div className="border rounded-md p-4">
                     <label className="block text-sm font-medium text-gray-700 mb-1">사진</label>
-                    <MultiImageUploader onImagesChange={handleImagesChange} maxImages={3} />
+                    <MultiImageUploader onImagesChange={handleImagesChange} maxImages={3}/>
                     <div className="mt-2 flex space-x-2">
                         {formData.missingPetImages.map((url, index) => (
-                            <img key={index} src={url} alt={`업로드된 이미지 ${index + 1}`} className="w-20 h-20 object-cover rounded" />
+                            <img key={index} src={url} alt={`업로드된 이미지 ${index + 1}`}
+                                 className="w-20 h-20 object-cover rounded"/>
                         ))}
                     </div>
                 </div>
 
                 <div className="border rounded-md p-4">
-                    <label htmlFor="microchipId" className="block text-sm font-medium text-gray-700 mb-1">마이크로칩 번호</label>
+                    <label htmlFor="microchipId" className="block text-sm font-medium text-gray-700 mb-1">마이크로칩
+                        번호</label>
                     <input
                         type="text"
                         name="microchipId"

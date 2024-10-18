@@ -4,7 +4,7 @@ import { registerOfficial } from '../api/registerOfficial';
 import { OfficialRegistrationDto } from '../model/types';
 import { PostCodeSearch } from '../../../shared/components/PostCodeSearch';
 import { MultiImageUploader } from '../../../shared/components/ImageUploader';
-import {AddressData} from "../../../shared/components/model/AddressData.tsx";
+import {DEFAULT_LOCATION_RECORD, LocationRecord} from "../../../shared/location.ts";
 
 const OfficialRegistrationForm: React.FC = () => {
     const [formData, setFormData] = useState<OfficialRegistrationDto>({
@@ -13,13 +13,7 @@ const OfficialRegistrationForm: React.FC = () => {
         email: '',
         phoneNumber: '',
         institutionType: '',
-        location: {
-            postcode: '',
-            address: '',
-            addressDetail: '',
-            latitude: 0,
-            longitude: 0,
-        },
+        location: DEFAULT_LOCATION_RECORD,
         website: '',
         institutionDescription: '',
         operatingHours: '',
@@ -64,16 +58,10 @@ const OfficialRegistrationForm: React.FC = () => {
         setFormData(prev => ({ ...prev, [name]: checked }));
     };
 
-    const handleLocationSelect = (addressData: AddressData) => {
+    const handleLocationSelect = (locationData: LocationRecord) => {
         setFormData(prev => ({
             ...prev,
-            location: {
-                postcode: addressData.postcode,
-                address: addressData.address,
-                addressDetail: addressData.addressDetail,
-                latitude: addressData.latitude,
-                longitude: addressData.longitude,
-            }
+            location: locationData
         }));
     };
 

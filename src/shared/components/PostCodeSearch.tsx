@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import DaumPostcode, { Address } from 'react-daum-postcode';
-import { AddressData } from "./model/AddressData.tsx";
+import {AddressData} from "./model/AddressData.tsx";
 
 // Kakao Maps API 타입 정의
 declare global {
@@ -58,13 +58,8 @@ export const PostCodeSearch: React.FC<Props> = ({ onAddressSelect }) => {
 
         script.onload = () => {
             window.kakao.maps.load(() => {
-                console.log("Kakao Maps API loaded successfully");
                 setKakaoMapsLoaded(true);
             });
-        };
-
-        script.onerror = (e) => {
-            console.error("Failed to load Kakao Maps API", e);
         };
 
         document.head.appendChild(script);
@@ -75,39 +70,39 @@ export const PostCodeSearch: React.FC<Props> = ({ onAddressSelect }) => {
     }, []);
 
     const handleComplete = useCallback((data: Address) => {
-        const addr = data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
-        let extraAddr = "";
+        const fullAddress = data.address;
+        const extraAddress = data.buildingName ? ` (${data.buildingName})` : '';
 
-        if (data.userSelectedType === "R") {
-            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-                extraAddr += data.bname;
-            }
-            if (data.buildingName !== "" && data.apartment === "Y") {
-                extraAddr += extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
-            }
-            if (extraAddr !== "") {
-                extraAddr = `(${extraAddr})`;
-            }
-        }
+        const addressParts = fullAddress.split(' ');
+        const province = addressParts[0];
+        const city = addressParts[1];
+        const district = addressParts[2];
+        const street = addressParts.slice(3).join(' ');
 
         const newAddressData: AddressData = {
             postcode: data.zonecode,
-            address: addr,
-            addressDetail: extraAddr,
+            province: province,
+            city: city,
+            district: district,
+            street: street,
+            addressDetail: extraAddress,
             latitude: 0,
             longitude: 0,
         };
 
+        // 주소 정보 로깅
+        console.log("Parsed Address Data:", newAddressData);
+
         if (kakaoMapsLoaded && window.kakao && window.kakao.maps) {
             const geocoder = new window.kakao.maps.services.Geocoder();
-            geocoder.addressSearch(addr, (result, status) => {
+            geocoder.addressSearch(fullAddress, (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
                     const { x, y } = result[0];
                     newAddressData.longitude = parseFloat(x);
                     newAddressData.latitude = parseFloat(y);
-                    console.log("좌표 변환 성공:", { latitude: y, longitude: x });
+                    console.log("Geocoding Success:", { latitude: y, longitude: x });
                 } else {
-                    console.error("좌표 변환 실패:", status);
+                    console.error("Geocoding Failed:", status);
                 }
                 onAddressSelect(newAddressData);
                 setIsOpen(false);
