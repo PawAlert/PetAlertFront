@@ -4,12 +4,14 @@ import { LoginUserModel } from "../model/LoginUserModel.ts";
 import { SOCIAL_LOGIN_URLS } from '../../../../app/auth.ts';
 import { useAuth } from '../customHook/useAuth.ts';
 import {fetchUserProfile} from "../../../chat/api/useApi.ts";
+import { useNavigate } from 'react-router-dom';
 
 export const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const loginMutation = useLoginMutation();
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,6 +24,7 @@ export const LoginForm: React.FC = () => {
                 try {
                     const userProfile = await fetchUserProfile();
                     localStorage.setItem('uid', userProfile.uid);
+                    navigate('/');
                 } catch (error) {
                     console.error('Failed to fetch user profile:', error);
                 }
