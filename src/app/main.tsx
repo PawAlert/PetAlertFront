@@ -19,6 +19,7 @@ function App() {
             login(token);
             // URL에서 토큰 제거
             window.history.replaceState({}, document.title, window.location.pathname);
+            window.location.reload();
         }
     }, [login]);
 
