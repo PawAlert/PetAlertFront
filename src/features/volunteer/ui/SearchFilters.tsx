@@ -3,9 +3,10 @@ import Select, {SingleValue, StylesConfig} from 'react-select';
 import {useVolunteerSearchStore} from '../model/store.ts';
 import {ActivityType} from '../model/types.ts';
 import {area} from "../../../shared/ares.ts";
+import {VolunteerSearchFiltersType} from "../index.ts";
 
 interface SearchFiltersProps {
-    onFilterChange: () => void;
+    onFilterChange: (newFilters: Partial<VolunteerSearchFiltersType>) => void;
 }
 
 type SelectOption = { value: string; label: string };
@@ -31,29 +32,46 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({onFilterChange}) =>
 
     const handleActivityTypeChange = (selectedOption: SingleValue<SelectOption>) => {
         if (selectedOption) {
-            setFilters({activityType: selectedOption.value as keyof typeof ActivityType | '전체'});
-            onFilterChange();
+            const newFilters = {
+                ...filters,
+                activityType: selectedOption.value as keyof typeof ActivityType | '전체'
+            };
+            setFilters(newFilters);
+            onFilterChange(newFilters);
         }
     };
 
     const handleProvinceChange = (selectedOption: SingleValue<SelectOption>) => {
         if (selectedOption) {
-            setFilters({province: selectedOption.value, city: '전체'});
-            onFilterChange();
+            const newFilters = {
+                ...filters,
+                province: selectedOption.value,
+                city: '전체'
+            };
+            setFilters(newFilters);
+            onFilterChange(newFilters);
         }
     };
 
     const handleCityChange = (selectedOption: SingleValue<SelectOption>) => {
         if (selectedOption) {
-            setFilters({city: selectedOption.value});
-            onFilterChange();
+            const newFilters = {
+                ...filters,
+                city: selectedOption.value
+            };
+            setFilters(newFilters);
+            onFilterChange(newFilters);
         }
     };
 
     const handleSortChange = (selectedOption: SingleValue<SelectOption>) => {
         if (selectedOption) {
-            setFilters({sortByClosest: selectedOption.value === 'closest'});
-            onFilterChange();
+            const newFilters = {
+                ...filters,
+                sortByClosest: selectedOption.value === 'closest'
+            };
+            setFilters(newFilters);
+            onFilterChange(newFilters);
         }
     };
 
