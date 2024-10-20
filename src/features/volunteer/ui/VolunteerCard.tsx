@@ -5,9 +5,10 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaClock } from 'react-icons/fa'
 
 interface VolunteerCardProps {
     activity: VolunteerActivity;
+    onClick?: (activity: VolunteerActivity) => void;  // onClick을 선택적 prop으로 추가
 }
 
-const VolunteerCard: React.FC<VolunteerCardProps> = ({ activity }) => {
+const VolunteerCard: React.FC<VolunteerCardProps> = ({ activity, onClick }) => {
     const navigate = useNavigate();
 
     const formatDate = (date: number[]) => {
@@ -15,7 +16,11 @@ const VolunteerCard: React.FC<VolunteerCardProps> = ({ activity }) => {
     };
 
     const handleClick = () => {
-        navigate(`/volunteer/${activity.id}`);
+        if (onClick) {
+            onClick(activity);
+        } else {
+            navigate(`/volunteer/${activity.id}`);
+        }
     };
 
     function getActivityTypeInKorean(type: string): string {
