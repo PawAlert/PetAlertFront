@@ -4,16 +4,18 @@ import '../../index.css';
 import { RouterProvider } from "react-router-dom";
 import withRouter from "./routers/withRouter.tsx";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import TokenHandler from './TokenHandler'; // TokenHandler 컴포넌트를 import
 
-// QueryClient 인스턴스 생성
 const queryClient = new QueryClient();
 
-
-
-createRoot(document.getElementById('root')!).render(
+const Root = () => (
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={withRouter} />
+            <TokenHandler>
+                <RouterProvider router={withRouter} />
+            </TokenHandler>
         </QueryClientProvider>
     </StrictMode>
 );
+
+createRoot(document.getElementById('root')!).render(<Root />);
