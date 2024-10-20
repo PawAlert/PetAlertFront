@@ -24,7 +24,7 @@ jobs:
             name: pawalert
             app: web
             options:
-              nodeversion: 14
+              nodeversion: 20
               spa: true
               buildenv:
                 - name: VITE_APP_API_URL
