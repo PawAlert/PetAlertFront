@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLoginMutation } from "../api/LoginUser.ts";
 import { LoginUserModel } from "../model/LoginUserModel.ts";
 import { SOCIAL_LOGIN_URLS } from '../../../../app/auth.ts';
 import { useAuth } from '../customHook/useAuth.ts';
-import {fetchUserProfile} from "../../../chat/api/useApi.ts";
-import { useNavigate } from 'react-router-dom';
+import { fetchUserProfile } from "../../../chat/api/useApi.ts";
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -12,6 +12,26 @@ export const LoginForm: React.FC = () => {
     const loginMutation = useLoginMutation();
     const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const token = searchParams.get('token');
+        if (token) {
+            handleLoginSuccess(token);
+        }
+    }, [location]);
+
+    const handleLoginSuccess = async (token: string) => {
+        login(token);
+        try {
+            const userProfile = await fetchUserProfile();
+            localStorage.setItem('uid', userProfile.uid);
+            navigate('/');
+        } catch (error) {
+            console.error('Failed to fetch user profile:', error);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,20 +39,10 @@ export const LoginForm: React.FC = () => {
         loginMutation.mutate(credentials, {
             onSuccess: async (data) => {
                 const token = data.data.token;
-                login(token);
-                localStorage.setItem('token', token);
-                try {
-                    const userProfile = await fetchUserProfile();
-                    localStorage.setItem('uid', userProfile.uid);
-                    navigate('/');
-
-                } catch (error) {
-                    console.error('Failed to fetch user profile:', error);
-                }
+                handleLoginSuccess(token);
             }
         });
     };
-
 
     const handleSocialLogin = (provider: 'GOOGLE' | 'NAVER' | 'KAKAO') => {
         window.location.href = SOCIAL_LOGIN_URLS[provider];
@@ -40,40 +50,50 @@ export const LoginForm: React.FC = () => {
 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-6 text-center">로그인</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">이메일</label>
+            <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
+                        이메일
+                    </label>
                     <input
-                        id="email"
                         type="email"
+                        id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">비밀번호</label>
+                <div className="mb-6">
+                    <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+                        비밀번호
+                    </label>
                     <input
-                        id="password"
                         type="password"
+                        id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
-                        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                         required
                     />
                 </div>
-                <button
-                    type="submit"
-                    className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    disabled={loginMutation.isPending}
-                >
-                    {loginMutation.isPending ? '로그인 중...' : '로그인'}
-                </button>
+                <div className="flex items-center justify-between">
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    >
+                        로그인
+                    </button>
+                    <a
+                        className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                        href="/forgot-password"
+                    >
+                        비밀번호를 잊으셨나요?
+                    </a>
+                </div>
             </form>
+
             <div className="mt-6">
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
@@ -83,6 +103,7 @@ export const LoginForm: React.FC = () => {
                         <span className="px-2 bg-white text-gray-500">Or continue with</span>
                     </div>
                 </div>
+
                 <div className="mt-6 grid grid-cols-3 gap-3">
                     <button
                         onClick={() => handleSocialLogin('GOOGLE')}
@@ -94,7 +115,7 @@ export const LoginForm: React.FC = () => {
                         onClick={() => handleSocialLogin('NAVER')}
                         className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                     >
-                        Naver는 오류해결중
+                        Naver
                     </button>
                     <button
                         onClick={() => handleSocialLogin('KAKAO')}
@@ -104,9 +125,10 @@ export const LoginForm: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <p className="mt-6 text-center text-sm text-gray-500">
+
+            <p className="mt-8 text-center text-sm text-gray-600">
                 계정이 없으신가요?{' '}
-                <a href="signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+                <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
                     회원가입
                 </a>
             </p>
