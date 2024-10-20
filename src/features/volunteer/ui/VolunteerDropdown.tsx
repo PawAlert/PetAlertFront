@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
-const AdoptionDropdown: React.FC = () => {
+const VolunteerDropdown: React.FC = () => {
     const location = useLocation();
     const isMainPage = location.pathname === '/';
 
@@ -11,13 +11,12 @@ const AdoptionDropdown: React.FC = () => {
         <Menu as="div" className="relative inline-block text-left">
             <div>
                 <Menu.Button className={`inline-flex w-full justify-center items-center rounded-md px-4 py-2 text-[18px] font-medium ${isMainPage ? 'text-white' : 'text-black'} hover:text-gray-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}>
-                    입양
+                    봉사활동
                     <ChevronDownIcon
                         className="ml-2 -mr-1 h-5 w-5"
                         aria-hidden="true"
                     />
                 </Menu.Button>
-
             </div>
             <Transition
                 as={React.Fragment}
@@ -33,36 +32,24 @@ const AdoptionDropdown: React.FC = () => {
                         <Menu.Item>
                             {({ focus }) => (
                                 <Link
-                                    to="/adoption"
+                                    to="/volunteer"
                                     className={`${
                                         focus ? 'bg-violet-500 text-white' : 'text-gray-900'
                                     } group flex w-full items-center rounded-md px-2 py-2 text-[16px] font-medium`}
                                 >
-                                    입양 공고
+                                    봉사활동
                                 </Link>
                             )}
                         </Menu.Item>
-                        {/*<Menu.Item>*/}
-                        {/*    {({ focus }) => (*/}
-                        {/*        <Link*/}
-                        {/*            to="/adoption/reviews"*/}
-                        {/*            className={`${*/}
-                        {/*                focus ? 'bg-violet-500 text-white' : 'text-gray-900'*/}
-                        {/*            } group flex w-full items-center rounded-md px-2 py-2 text-[16px]`}*/}
-                        {/*        >*/}
-                        {/*            입양 후기*/}
-                        {/*        </Link>*/}
-                        {/*    )}*/}
-                        {/*</Menu.Item>*/}
                         <Menu.Item>
                             {({ focus }) => (
                                 <Link
-                                    to="/adoption/guide"
+                                    to="/volunteer/reviews"
                                     className={`${
                                         focus ? 'bg-violet-500 text-white' : 'text-gray-900'
                                     } group flex w-full items-center rounded-md px-2 py-2 text-[16px]`}
                                 >
-                                    입양 방법
+                                    활동후기
                                 </Link>
                             )}
                         </Menu.Item>
@@ -73,4 +60,4 @@ const AdoptionDropdown: React.FC = () => {
     );
 };
 
-export default AdoptionDropdown;
+export default VolunteerDropdown;

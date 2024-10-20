@@ -1,6 +1,7 @@
 import React from 'react';
 import {VolunteerActivity} from "../model/types.ts";
-import {VolunteerCard} from "./ VolunteerCard.tsx";
+import VolunteerCard from "./VolunteerCard.tsx";
+
 
 
 interface VolunteerGridProps {

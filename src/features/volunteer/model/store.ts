@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SearchFilters } from "./types.ts";
+import {SearchFilters, VolunteerActivity} from "./types.ts";
+import {fetchVolunteerActivities} from "../api/volunteerSearchApi.ts";
 
 interface VolunteerSearchStore {
     filters: SearchFilters;
@@ -32,3 +33,16 @@ export const useVolunteerSearchStore = create<VolunteerSearchStore>()(
         }
     )
 );
+
+interface VolunteerStore {
+    activities: VolunteerActivity[];
+    fetchActivities: (sortByClosest?: boolean) => Promise<void>;
+}
+
+export const useVolunteerStore = create<VolunteerStore>((set) => ({
+    activities: [],
+    fetchActivities: async (sortByClosest = false) => {
+        const activities = await fetchVolunteerActivities(sortByClosest);
+        set({ activities });
+    },
+}));

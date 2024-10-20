@@ -75,5 +75,25 @@ export enum ActivityType {
     EDUCATION = "교육 및 훈련",
     FACILITY = "시설 봉사",
     EVENT = "행사 지원",
+    ENVIRONMENTAL = "환경 봉사",
     OTHER = "기타"
+}
+
+export interface VolunteerActivity {
+    id: number;
+    userUid: string;
+    title: string;
+    description: string;
+    date: number[];
+    activityType: ActivityType;  // ActivityType enum을 사용
+    startTime: number[];
+    endTime: number[];
+    location: Location;  // 이미 정의된 Location 인터페이스를 사용
+    requiredVolunteers: number;
+    requiredSkills: string;
+    organizationName: string;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: string;
+    images: string[];
 }

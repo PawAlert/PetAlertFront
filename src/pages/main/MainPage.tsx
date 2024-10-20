@@ -1,13 +1,20 @@
-import React from "react";
-import Banner from "../../features/main/ui/ Banner.tsx";
-import {LatestMissingPosts} from "../../features/missingPost/ui/LatestMissingPosts.tsx";
+import React from 'react';
+import { LatestMissingPosts } from '../../features/missingPost/ui/LatestMissingPosts';
+import ReviewsSection from '../../features/main/ui/ReviewsSection.tsx';
+import NoticeSection from '../../features/main/ui/NoticeSection.tsx';
+import Banner from "../../features/main/ui/Banner.tsx";
+import VolunteerSection from "../../features/volunteer/ui/VolunteerSection.tsx";
+import Footer from "../../features/main/ui/Footer.tsx";
 
 const MainPage: React.FC = () => {
     return (
-        <div>
+        <div className="min-h-screen">
             <Banner />
-            <LatestMissingPosts/>
-
+            <VolunteerSection/>
+            <LatestMissingPosts />
+            <ReviewsSection />
+            <NoticeSection />
+            <Footer/>
         </div>
     );
 };

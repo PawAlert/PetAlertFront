@@ -1,64 +1,47 @@
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../features/auth/Login/model/store";
 import AdoptionDropdown from "../../features/adoption/ui/AdoptionDropdown";
-import VolunteerDropdown from "../../features/volunteerSearch/ui/VolunteerDropdown";
+import VolunteerDropdown from "../../features/volunteer/ui/VolunteerDropdown.tsx";
 
 const Header = () => {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn());
-  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const checkLoginStatus = useAuthStore((state) => state.isLoggedIn);
+  const location = useLocation();
+  const isMainPage = location.pathname === '/';
 
-  const handleLogout = () => {
-    clearAuth();
-    // todo : 로그아웃 이후 동작 추가해주기
-  };
+  useEffect(() => {
+    setIsLoggedIn(checkLoginStatus());
+  }, [checkLoginStatus, location]);
+
+  const headerClasses = `w-full ${isMainPage ? 'bg-transparent absolute top-0 left-0 right-0' : 'bg-white shadow-sm'} z-50`;
+  const textClasses = isMainPage ? 'text-white' : 'text-black';
+  const loginButtonClasses = `px-4 py-2 ${isMainPage ? 'bg-transparent text-white border border-white' : 'bg-black text-white'} rounded-full`;
 
   return (
-      <header className="w-full bg-white">
-        <div className="container mx-auto py-5 px-4">
-          <div className="flex justify-between items-center flex-wrap">
-            <Link to="/">
-              <h2 className="text-2xl font-bold text-primary">PetAlert</h2>
+      <header className={headerClasses}>
+        <div className="container mx-auto py-4 px-6">
+          <div className="flex justify-between items-center">
+            <Link to="/" className={`flex items-center space-x-2 ${textClasses}`}>
+              <img src="/assets/506572108c2c11efbee1ad74d3898230.jpg" alt="PetAlert Logo" className="w-8 h-8"/>
+              <span className="text-xl font-bold">PetAlert</span>
             </Link>
 
-            <nav className="flex items-center space-x-4 flex-wrap">
-              {isLoggedIn ? (
-                  <>
-                    <Link to="/mypage/profile">
-                      <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
-                        MyPage
-                      </h2>
-                    </Link>
-                    <button
-                        onClick={handleLogout}
-                        className="text-lg font-semibold text-primary hover:text-red-600 transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </>
-              ) : (
-                  <Link to="/login">
-                    <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
-                      Login
-                    </h2>
-                  </Link>
-              )}
-              <div className="inline-block">
-                <AdoptionDropdown />
-              </div>
-              <div className="inline-block">
-                <VolunteerDropdown />
-              </div>
-              <Link to="/missingPostList">
-                <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
-                  반려동물 찾아요
-                </h2>
-              </Link>
-              <Link to="/example">
-                <h2 className="text-lg font-semibold text-primary hover:text-red-600 transition-colors">
-                  shared 사용예제
-                </h2>
-              </Link>
+            <nav className={`flex-1 flex justify-center items-center space-x-8 ${textClasses} ml-12`}>
+              <Link to="/missingPostList" className="text-[18px] font-medium hover:text-gray-300 transition-colors">반려동물 찾아요</Link>
+              <VolunteerDropdown/>
+              <AdoptionDropdown/>
+              <Link to="/" className="text-[18px] font-medium hover:text-gray-300 transition-colors">공지사항</Link>
             </nav>
+
+            <div>
+              {isLoggedIn ? (
+                  <Link to="/mypage/profile"
+                        className={`${textClasses} text-[18px] font-medium hover:text-gray-300 transition-colors`}>MyPage</Link>
+              ) : (
+                  <Link to="/login" className={`${loginButtonClasses} text-[18px] font-medium`}>Login</Link>
+              )}
+            </div>
           </div>
         </div>
       </header>

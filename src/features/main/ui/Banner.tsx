@@ -1,13 +1,14 @@
 const Banner = () => {
     return (
-        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] z-[-1]">
+        <div className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px]">
             <img
-                src="https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                src="/assets/2ea106208c2811efbee1ad74d3898230.jpeg"
                 alt="강아지"
                 className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-            <div className="absolute top-[35%] right-0 transform -translate-y-1/2 text-right text-white w-full sm:w-3/4 md:w-2/3 lg:w-1/2 p-4 sm:p-6 md:p-8 lg:p-12">
+            <div
+                className="absolute top-[35%] right-0 transform -translate-y-1/2 text-right text-white w-full sm:w-3/4 md:w-2/3 lg:w-1/2 p-4 sm:p-6 md:p-8 lg:p-12">
                 <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-2 sm:mb-3 md:mb-4">
                     우리와 함께하는 소중한 순간들을 기억하며,
                 </h1>

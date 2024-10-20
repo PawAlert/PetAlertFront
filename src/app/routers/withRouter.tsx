@@ -24,6 +24,7 @@ import OfficialRegistrationPage from "../../pages/OfficialRegistration/ Official
 import VolunteerSearchPage from "../../pages/VolunteerSearchPage/VolunteerSearchPage.tsx";
 import {VolunteerDetailPage} from "../../pages/VolunteerSearchPage/VolunteerDetailPage.tsx";
 import VolunteerReviewsPage from "../../pages/VolunteerSearchPage/VolunteerReviewsPage.tsx";
+import CreateNoticePage from "../../pages/notice/CreateNoticePage.tsx";
 
 
 
@@ -81,6 +82,7 @@ const withRouter = createBrowserRouter([
                     {path: "inquiries/:id", element: <InquiryDetailView/>},
                     {path: "adoptionPosts", element: <AdoptionPostsList/>},
                     {path: "officialRegistration", element: <OfficialRegistrationPage/>},
+                    {path: "noticeAdmin", element: <CreateNoticePage/>},
                 ]
             },
             {

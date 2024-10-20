@@ -8,7 +8,7 @@ import {
     useVolunteerSearch,
     useVolunteerSearchStore,
     VolunteerSearchFiltersType
-} from '../../features/volunteerSearch';
+} from '../../features/volunteer';
 
 export const VolunteerSearchPage: React.FC = () => {
     const {filters, pageNumber, pageSize, setPage, setFilters} = useVolunteerSearchStore();
@@ -30,7 +30,7 @@ export const VolunteerSearchPage: React.FC = () => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-6">Volunteer Activities</h1>
+            <h1 className="text-3xl font-bold mb-6">봉사활동</h1>
             <SearchFilters onFilterChange={() => handleFilterChange({})}/>
             <LoadingError isLoading={isLoading} isError={isError} error={error as Error | null}/>
             {!isLoading && !isError && data && (

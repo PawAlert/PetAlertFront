@@ -1,20 +1,28 @@
 import { create } from 'zustand';
-import { FetchMissingPostsParams } from './types';
+
+interface MissingPostFilters {
+    status: string;
+    province: string;
+    city: string;
+    sortByClosest: boolean;
+    page: number;
+    size: number;
+}
 
 interface MissingPostStore {
-    params: FetchMissingPostsParams;
-    setParams: (newParams: Partial<FetchMissingPostsParams>) => void;
+    filters: MissingPostFilters;
+    setFilters: (newFilters: Partial<MissingPostFilters>) => void;
 }
 
 export const useMissingPostStore = create<MissingPostStore>((set) => ({
-    params: {
-        page: 0,
-        size: 10,
-        sortDirection: 'DESC', // 최신순을 기본값으로 설정
-        statusFilter: '', // 전체를 기본값으로 설정
-        sort: 'createdAt',
+    filters: {
         status: '',
+        province: '',
+        city: '',
+        sortByClosest: true,
+        page: 0,
+        size: 9,
     },
-    setParams: (newParams) =>
-        set((state) => ({ params: { ...state.params, ...newParams } })),
+    setFilters: (newFilters) =>
+        set((state) => ({ filters: { ...state.filters, ...newFilters } })),
 }));

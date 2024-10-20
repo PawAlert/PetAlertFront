@@ -26,6 +26,7 @@ export interface MissingPost {
     locationRecord: LocationRecord;
     dateLost: number[];
     petImageUrl: string;
+    missingStatus : string;
 }
 
 export interface PaginationInfo {
@@ -36,41 +37,45 @@ export interface PaginationInfo {
 }
 
 export interface MissingPostsResponse {
-    content: MissingPost[];
-    pageable: {
-        pageNumber: number;
-        pageSize: number;
+    status: string;
+    message: string;
+    data: {
+        content: MissingPost[];
+        pageable: {
+            pageNumber: number;
+            pageSize: number;
+            sort: {
+                sorted: boolean;
+                unsorted: boolean;
+                empty: boolean;
+            };
+            offset: number;
+            paged: boolean;
+            unpaged: boolean;
+        };
+        last: boolean;
+        totalElements: number;
+        totalPages: number;
+        first: boolean;
+        numberOfElements: number;
+        size: number;
+        number: number;
         sort: {
             sorted: boolean;
             unsorted: boolean;
             empty: boolean;
         };
-        offset: number;
-        paged: boolean;
-        unpaged: boolean;
-    };
-    last: boolean;
-    totalElements: number;
-    totalPages: number;
-    first: boolean;
-    numberOfElements: number;
-    size: number;
-    number: number;
-    sort: {
-        sorted: boolean;
-        unsorted: boolean;
         empty: boolean;
     };
-    empty: boolean;
 }
 
 export interface FetchMissingPostsParams {
     page: number;
-    size?: number;
-    sortDirection?: 'ASC' | 'DESC';
-    statusFilter?: 'MISSING' | 'FOUND' | 'TEMPORARY_CARE' | 'CLOSED' | '';
-    sort?: string;
-    status: string;
+    size: number;
+    sortByClosest: boolean;
+    status?: string;
+    province?: string;
+    city?: string;
 }
 
 export interface MissingPostDetailData {

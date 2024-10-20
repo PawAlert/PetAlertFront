@@ -1,41 +1,97 @@
 import React from 'react';
+import Select, { SingleValue } from 'react-select';
 import { useMissingPostStore } from '../model/store';
+import { area } from "../../../shared/ares";
+
+type SelectOption = { value: string; label: string };
 
 const SearchFilters: React.FC = () => {
-    const { params, setParams } = useMissingPostStore();
+    const { filters, setFilters } = useMissingPostStore();
 
-    // 상태값을 한국어로 변환하는 함수
-    const getStatusLabel = (status: string) => {
-        switch(status) {
-            case 'MISSING': return '실종중';
-            case 'FOUND': return '발견';
-            case 'TEMPORARY_CARE': return '임시보호';
-            case 'CLOSED': return '종료';
-            default: return '전체';
+    const handleStatusChange = (selectedOption: SingleValue<SelectOption>) => {
+        if (selectedOption) {
+            setFilters({ status: selectedOption.value, page: 0 });
         }
     };
 
+    const handleProvinceChange = (selectedOption: SingleValue<SelectOption>) => {
+        if (selectedOption) {
+            setFilters({ province: selectedOption.value, city: '', page: 0 });
+        }
+    };
+
+    const handleCityChange = (selectedOption: SingleValue<SelectOption>) => {
+        if (selectedOption) {
+            setFilters({ city: selectedOption.value, page: 0 });
+        }
+    };
+
+    const handleSortChange = (selectedOption: SingleValue<SelectOption>) => {
+        if (selectedOption) {
+            setFilters({ sortByClosest: selectedOption.value === 'latest', page: 0 });
+        }
+    };
+
+    const statusOptions: SelectOption[] = [
+        { value: '', label: '상태 선택' },
+        { value: 'MISSING', label: '실종' },
+        { value: 'FOUND', label: '발견' },
+        { value: 'TEMPORARY_CARE', label: '임시보호' },
+        { value: 'CLOSED', label: '종료' }
+    ];
+
+    const provinceOptions: SelectOption[] = [
+        { value: '', label: '시/도 선택' },
+        ...area.map(province => ({ value: province.name, label: province.name }))
+    ];
+
+    const cityOptions: SelectOption[] = filters.province
+        ? [
+            { value: '', label: '시/군/구 선택' },
+            ...(area.find(province => province.name === filters.province)?.subArea.map(city => ({
+                value: city,
+                label: city
+            })) || [])
+        ]
+        : [{ value: '', label: '시/군/구 선택' }];
+
+    const sortOptions: SelectOption[] = [
+        { value: 'latest', label: '작성일 최신순' },
+        { value: 'oldest', label: '작성일 오래된순' }
+    ];
+
     return (
-        <div className="flex space-x-4 mb-4">
-            <select
-                className="border border-gray-300 rounded px-2 py-1"
-                value={params.sortDirection}
-                onChange={(e) => setParams({sortDirection: e.target.value as 'ASC' | 'DESC', page: 0})}
-            >
-                <option value="DESC">실종일 가까운 순서</option>
-                <option value="ASC">오래된 순</option>
-            </select>
-            <select
-                className="border border-gray-300 rounded px-2 py-1"
-                value={params.statusFilter}
-                onChange={(e) => setParams({ statusFilter: e.target.value as 'MISSING' | 'FOUND' | 'TEMPORARY_CARE' | 'CLOSED' | '', page: 0 })}
-            >
-                <option value="">{getStatusLabel('')}</option>
-                <option value="MISSING">{getStatusLabel('MISSING')}</option>
-                <option value="FOUND">{getStatusLabel('FOUND')}</option>
-                <option value="TEMPORARY_CARE">{getStatusLabel('TEMPORARY_CARE')}</option>
-                <option value="CLOSED">{getStatusLabel('CLOSED')}</option>
-            </select>
+        <div className="flex flex-wrap gap-4 mb-4">
+
+            <Select<SelectOption>
+                options={provinceOptions}
+                onChange={handleProvinceChange}
+                value={provinceOptions.find(option => option.value === filters.province)}
+                placeholder="시/도 선택"
+                className="w-48"
+            />
+            <Select<SelectOption>
+                options={cityOptions}
+                onChange={handleCityChange}
+                value={cityOptions.find(option => option.value === filters.city)}
+                placeholder="시/군/구 선택"
+                isDisabled={!filters.province}
+                className="w-48"
+            />
+            <Select<SelectOption>
+                options={statusOptions}
+                onChange={handleStatusChange}
+                value={statusOptions.find(option => option.value === filters.status)}
+                placeholder="상태 선택"
+                className="w-48"
+            />
+            <Select<SelectOption>
+                options={sortOptions}
+                onChange={handleSortChange}
+                value={sortOptions.find(option => option.value === (filters.sortByClosest ? 'latest' : 'oldest'))}
+                placeholder="정렬 선택"
+                className="w-48"
+            />
         </div>
     );
 };

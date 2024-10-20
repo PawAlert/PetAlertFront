@@ -1,9 +1,23 @@
 import axios from 'axios';
 import { MissingPostsResponse, FetchMissingPostsParams } from '../model/types';
 
-export const fetchMissingPosts = async (params: FetchMissingPostsParams): Promise<MissingPostsResponse> => {
-    // const response = await axios.get<MissingPostsResponse>(`${import.meta.env.VITE_APP_API_URL}/api/missing/list`, { params });
-    const response = await axios.get<MissingPostsResponse>(`${import.meta.env.VITE_APP_API_URL}/api/missing/list`, { params });
+export const fetchMissingPosts = async (filters: FetchMissingPostsParams): Promise<MissingPostsResponse> => {
+    const token = localStorage.getItem('token');
+    const headers: Record<string, string> = {};
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await axios.get<MissingPostsResponse>(
+        // `http://localhost:8080/api/missing/search`,
+        `${import.meta.env.VITE_APP_API_URL}/api/missing/search`,
+        {
+            params: filters,
+            headers,
+        }
+    );
+    console.log('API Response:', response);
 
     return response.data;
 };
@@ -12,7 +26,7 @@ export const fetchLatestMissingPosts = async (limit: number = 6): Promise<Missin
     const params: FetchMissingPostsParams = {
         page: 0,
         size: limit,
-        sort: 'createdAt,desc',
+        sortByClosest: true,
         status: 'MISSING'
     };
     return fetchMissingPosts(params);
