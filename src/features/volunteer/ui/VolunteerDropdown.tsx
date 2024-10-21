@@ -3,9 +3,35 @@ import { Menu, Transition } from '@headlessui/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
-const VolunteerDropdown: React.FC = () => {
+interface VolunteerDropdownProps {
+    isMobile: boolean;
+}
+
+const VolunteerDropdown: React.FC<VolunteerDropdownProps> = ({ isMobile }) => {
     const location = useLocation();
     const isMainPage = location.pathname === '/';
+
+    const menuItems = [
+        { to: "/volunteer", text: "봉사활동" },
+        { to: "/volunteer/reviews", text: "활동후기" },
+    ];
+
+    if (isMobile) {
+        return (
+            <div className="py-2">
+                <span className="block text-[18px] font-medium mb-2">봉사활동</span>
+                {menuItems.map((item) => (
+                    <Link
+                        key={item.to}
+                        to={item.to}
+                        className="block py-2 pl-4 text-[16px] text-gray-600 hover:text-gray-900"
+                    >
+                        {item.text}
+                    </Link>
+                ))}
+            </div>
+        );
+    }
 
     return (
         <Menu as="div" className="relative inline-block text-left">
@@ -29,30 +55,20 @@ const VolunteerDropdown: React.FC = () => {
             >
                 <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="px-1 py-1">
-                        <Menu.Item>
-                            {({ focus }) => (
-                                <Link
-                                    to="/volunteer"
-                                    className={`${
-                                        focus ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-[16px] font-medium`}
-                                >
-                                    봉사활동
-                                </Link>
-                            )}
-                        </Menu.Item>
-                        <Menu.Item>
-                            {({ focus }) => (
-                                <Link
-                                    to="/volunteer/reviews"
-                                    className={`${
-                                        focus ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                    } group flex w-full items-center rounded-md px-2 py-2 text-[16px]`}
-                                >
-                                    활동후기
-                                </Link>
-                            )}
-                        </Menu.Item>
+                        {menuItems.map((item) => (
+                            <Menu.Item key={item.to}>
+                                {({ active }) => (
+                                    <Link
+                                        to={item.to}
+                                        className={`${
+                                            active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-[16px]`}
+                                    >
+                                        {item.text}
+                                    </Link>
+                                )}
+                            </Menu.Item>
+                        ))}
                     </div>
                 </Menu.Items>
             </Transition>

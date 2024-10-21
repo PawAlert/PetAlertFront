@@ -18,14 +18,14 @@ import AdoptionGuidePage from "../../pages/Adoption/ AdoptionGuidePage.tsx";
 import AnnouncementDetailView from "../../features/adoption/ui/AnnouncementDetailView.tsx";
 import MyInquiriesList from "../../features/myPage/ui/MyInquiriesList.tsx";
 import InquiryDetailView from "../../features/myPage/ui/InquiryDetailView.tsx";
-import AdoptionPostsList from "../../features/adoption/ui/AdoptionPostsList.tsx";
 import CreateAnnouncementPage from "../../pages/Adoption/CreateAnnouncementPage.tsx";
 import OfficialRegistrationPage from "../../pages/OfficialRegistration/ OfficialRegistrationPage.tsx";
 import VolunteerSearchPage from "../../pages/VolunteerSearchPage/VolunteerSearchPage.tsx";
 import {VolunteerDetailPage} from "../../pages/VolunteerSearchPage/VolunteerDetailPage.tsx";
 import VolunteerReviewsPage from "../../pages/VolunteerSearchPage/VolunteerReviewsPage.tsx";
 import CreateNoticePage from "../../pages/notice/CreateNoticePage.tsx";
-
+import NoticeListPage from "../../pages/notice/NoticeListPage.tsx";
+import MyAnnouncementsPage from "../../pages/Adoption/MyAnnouncementsPage.tsx";
 
 
 const withRouter = createBrowserRouter([
@@ -80,17 +80,18 @@ const withRouter = createBrowserRouter([
                     {path: "chatList", element: <ChatList/>},
                     {path: "inquiries", element: <MyInquiriesList/>},
                     {path: "inquiries/:id", element: <InquiryDetailView/>},
-                    {path: "adoptionPosts", element: <AdoptionPostsList/>},
                     {path: "officialRegistration", element: <OfficialRegistrationPage/>},
                     {path: "noticeAdmin", element: <CreateNoticePage/>},
+                    {path: "notices", element: <NoticeListPage/>},
+                    {path: "myPosts/adoption", element: <MyAnnouncementsPage/>},
                 ]
             },
             {
                 path: "volunteer",
                 children: [
-                    { path: "", element: <VolunteerSearchPage /> },
-                    { path: ":id", element: <VolunteerDetailPage /> },
-                    { path: "reviews", element: <VolunteerReviewsPage /> },
+                    {path: "", element: <VolunteerSearchPage/>},
+                    {path: ":id", element: <VolunteerDetailPage/>},
+                    {path: "reviews", element: <VolunteerReviewsPage/>},
                 ]
             },
             //채팅 라우터
