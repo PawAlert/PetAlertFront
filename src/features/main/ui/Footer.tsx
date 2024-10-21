@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap justify-between">
                     <div className="w-full md:w-1/4 mb-6 md:mb-0">
-                        <Link to="/" className="text-2xl font-bold text-gray-800">PetAlert</Link>
+                        <Link to="/" className="text-2xl font-bold text-gray-800">PawAlert</Link>
                         <p className="mt-2">함께 만드는 행복한 반려 생활</p>
                     </div>
                     <div className="w-full md:w-1/4 mb-6 md:mb-0">
@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
                     <div className="w-full md:w-1/4 mb-6 md:mb-0">
                         <h3 className="text-lg font-semibold mb-4">연락처</h3>
                         <p>서울특별시 강남구 테헤란로 123</p>
-                        <p>이메일: info@petalert.com</p>
+                        <p>이메일: info@PawAlert.com</p>
                         <p>전화: 02-1234-5678</p>
                     </div>
                     <div className="w-full md:w-1/4">
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
                 <div className="border-t border-gray-200 mt-8 pt-8 text-sm text-center">
-                    © {new Date().getFullYear()} PetAlert. All Rights Reserved.
+                    © {new Date().getFullYear()} PawAlert. All Rights Reserved.
                 </div>
             </div>
         </footer>

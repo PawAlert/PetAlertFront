@@ -38,8 +38,8 @@ const Header = () => {
         <div className="container mx-auto py-4 px-6">
           <div className="flex justify-between items-center">
             <Link to="/" className={`flex items-center space-x-2 ${textClasses}`}>
-              <img src="/assets/506572108c2c11efbee1ad74d3898230.jpg" alt="PetAlert Logo" className="w-8 h-8"/>
-              <span className="text-xl font-bold">PetAlert</span>
+              <img src="/assets/506572108c2c11efbee1ad74d3898230.jpg" alt="PawAlert Logo" className="w-8 h-8"/>
+              <span className="text-xl font-bold">PawAlert</span>
             </Link>
 
             <div className="md:hidden">
